@@ -195,6 +195,58 @@ class AzureProvisioningAgent:
             self.logger.error(error_msg)
             raise
 
+    def _validate_storage_sku(self, sku: str, kind: str) -> str:
+        """
+        Validate and fix storage account SKU based on kind.
+
+        Premium storage only supports LRS and ZRS.
+        Standard storage supports LRS, GRS, RAGRS, ZRS, GZRS, RAGZRS.
+
+        Args:
+            sku: Requested SKU
+            kind: Storage kind
+
+        Returns:
+            Valid SKU string
+        """
+        # Premium storage SKU validation
+        if "Premium" in sku or "premium" in kind.lower():
+            # Premium only supports LRS and ZRS
+            if "_GRS" in sku or "_RAGRS" in sku or "_GZRS" in sku or "_RAGZRS" in sku:
+                original_sku = sku
+                sku = "Premium_LRS"
+                self.logger.warning(f"Invalid premium SKU '{original_sku}'. Changed to '{sku}'. Premium storage only supports LRS and ZRS.")
+                self.console.print(f"[yellow]⚠ Premium storage doesn't support GRS. Using {sku} instead.[/yellow]")
+
+        # Standardize format
+        valid_skus = [
+            "Standard_LRS", "Standard_GRS", "Standard_RAGRS", "Standard_ZRS",
+            "Standard_GZRS", "Standard_RAGZRS",
+            "Premium_LRS", "Premium_ZRS"
+        ]
+
+        # Check if SKU format is correct
+        if sku not in valid_skus:
+            # Try to fix common issues
+            sku_upper = sku.upper().replace("-", "_")
+
+            # Fix premium_grs -> Premium_LRS
+            if "PREMIUM" in sku_upper and ("GRS" in sku_upper or "RAGRS" in sku_upper):
+                sku = "Premium_LRS"
+                self.console.print(f"[yellow]⚠ Invalid SKU format. Using {sku} instead.[/yellow]")
+            # Fix standard_lrs -> Standard_LRS
+            elif "STANDARD" in sku_upper:
+                parts = sku_upper.split("_")
+                if len(parts) == 2:
+                    sku = f"Standard_{parts[1]}"
+            # Fix premium_lrs -> Premium_LRS
+            elif "PREMIUM" in sku_upper:
+                parts = sku_upper.split("_")
+                if len(parts) == 2:
+                    sku = f"Premium_{parts[1]}"
+
+        return sku
+
     def create_storage_account(
         self,
         account_name: str,
@@ -247,6 +299,9 @@ class AzureProvisioningAgent:
             except Exception:
                 # Storage account doesn't exist, create it
                 pass
+
+            # Validate and fix SKU if needed
+            sku = self._validate_storage_sku(sku, kind)
 
             # Create storage account parameters
             params = StorageAccountCreateParameters(
