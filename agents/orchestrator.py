@@ -1,6 +1,7 @@
 """
 Orchestrator Agent - Coordinates workflow between agents
 """
+import os
 import logging
 from datetime import datetime
 from typing import Dict, Any, Optional
@@ -34,14 +35,18 @@ class OrchestratorAgent:
     Manages execution state and phases of the platform provisioning workflow.
     """
 
-    def __init__(self, request_id: str):
+    def __init__(self, request_id: str, jira_agent=None, email_agent=None):
         """
         Initialize the Orchestrator Agent.
 
         Args:
             request_id: Unique identifier for this workflow execution
+            jira_agent: JiraIntegrationAgent instance (optional)
+            email_agent: EmailIntegrationAgent instance (optional)
         """
         self.request_id = request_id
+        self.jira_agent = jira_agent
+        self.email_agent = email_agent
         self.console = Console()
         self.logger = logging.getLogger(__name__)
 
@@ -56,10 +61,12 @@ class OrchestratorAgent:
                 "intent_parsing": None,
                 "planning": None,
                 "provisioning": None,
-                "documentation": None
+                "documentation": None,
+                "jira_tracking": None
             },
             "errors": [],
-            "metadata": {}
+            "metadata": {},
+            "jira_ticket": None
         }
 
     def _log_phase_start(self, phase: WorkflowPhase) -> None:
@@ -266,6 +273,7 @@ class OrchestratorAgent:
         """
         self.state["start_time"] = datetime.utcnow().isoformat()
         self.state["status"] = WorkflowStatus.IN_PROGRESS.value
+        self.state["user_request"] = user_request
 
         self.console.print(Panel.fit(
             f"[bold magenta]Starting Workflow Execution[/bold magenta]\n"
@@ -281,25 +289,196 @@ class OrchestratorAgent:
             intent_result = self._execute_intent_parsing(user_request)
             self.state["results"]["intent_parsing"] = intent_result
 
+            # Create Jira intake ticket after intent parsing
+            if self.jira_agent:
+                try:
+                    jira_result = self.jira_agent.create_intake_ticket(
+                        request_id=self.request_id,
+                        user_request=user_request,
+                        intent=intent_result
+                    )
+                    self.state["jira_ticket"] = jira_result
+                    self.state["results"]["jira_tracking"] = {"status": "ticket_created"}
+
+                    # Update ticket with intent parsing completion
+                    self.jira_agent.update_ticket_progress(
+                        ticket_key=jira_result.get('ticket_key'),
+                        phase="Intent Parsing",
+                        status="completed",
+                        details={
+                            "resource_type": intent_result.get('resource_type'),
+                            "purpose": intent_result.get('purpose'),
+                            "confidence": intent_result.get('confidence', 'N/A')
+                        }
+                    )
+                except Exception as jira_error:
+                    self.logger.warning(f"Jira ticket creation failed: {str(jira_error)}")
+
             # Phase 2: Planning
             self.state["current_phase"] = WorkflowPhase.PLANNING.value
             planning_result = self._execute_planning(intent_result)
             self.state["results"]["planning"] = planning_result
+
+            # Update Jira ticket with planning completion
+            if self.jira_agent and self.state.get("jira_ticket"):
+                try:
+                    self.jira_agent.update_ticket_progress(
+                        ticket_key=self.state["jira_ticket"].get('ticket_key'),
+                        phase="Planning",
+                        status="completed",
+                        details={
+                            "total_steps": len(planning_result.get('steps', [])),
+                            "estimated_duration": planning_result.get('estimated_duration', 'N/A')
+                        }
+                    )
+
+                    # Request approval after planning
+                    self.jira_agent.request_approval(
+                        ticket_key=self.state["jira_ticket"].get('ticket_key'),
+                        plan=planning_result,
+                        intent=intent_result
+                    )
+
+                    # Also send email approval if email agent is configured
+                    jira_ticket_url = self.state["jira_ticket"].get('ticket_url')
+                    if self.email_agent:
+                        try:
+                            self.email_agent.send_approval_request(
+                                request_id=self.request_id,
+                                user_request=self.state.get("user_request", "N/A"),
+                                plan=planning_result,
+                                intent=intent_result,
+                                jira_ticket_url=jira_ticket_url
+                            )
+                            self.console.print("[green]✓ Approval request email sent[/green]")
+                        except Exception as email_error:
+                            self.logger.warning(f"Email approval request failed: {str(email_error)}")
+                            self.console.print(f"[yellow]⚠ Email approval request failed: {str(email_error)}[/yellow]")
+
+                    # Wait for approval from either Jira or Email
+                    approval_result = self._wait_for_dual_approval(
+                        ticket_key=self.state["jira_ticket"].get('ticket_key'),
+                        poll_interval=10,
+                        timeout=600
+                    )
+
+                    # Record approval decision in Jira
+                    self.jira_agent.record_approval_decision(
+                        ticket_key=self.state["jira_ticket"].get('ticket_key'),
+                        approval_result=approval_result
+                    )
+
+                    # Send email confirmation if email agent is configured
+                    if self.email_agent and approval_result.get('source') == 'email':
+                        try:
+                            self.email_agent.send_approval_confirmation(
+                                request_id=self.request_id,
+                                approved=approval_result.get('approved', False),
+                                comment=approval_result.get('comment', '')
+                            )
+                        except Exception as email_error:
+                            self.logger.warning(f"Email confirmation failed: {str(email_error)}")
+
+                    # Store approval result in state
+                    self.state["results"]["approval"] = approval_result
+
+                    # Check if approved
+                    if not approval_result.get('approved', False):
+                        # Approval denied or timeout - stop workflow
+                        self.state["status"] = WorkflowStatus.FAILED.value
+                        self.state["current_phase"] = WorkflowPhase.FAILED.value
+                        self.state["end_time"] = datetime.utcnow().isoformat()
+
+                        error_msg = f"Workflow cancelled: {approval_result.get('comment', 'Approval denied')}"
+                        self.logger.warning(error_msg)
+                        self.console.print(f"\n[bold red]{error_msg}[/bold red]\n")
+
+                        return self.state
+
+                except Exception as jira_error:
+                    self.logger.warning(f"Jira approval workflow failed: {str(jira_error)}")
+                    self.console.print(f"[yellow]⚠ Jira approval failed, continuing with provisioning...[/yellow]")
 
             # Phase 3: Azure Provisioning
             self.state["current_phase"] = WorkflowPhase.PROVISIONING.value
             provisioning_result = self._execute_provisioning(planning_result, provisioning_agent)
             self.state["results"]["provisioning"] = provisioning_result
 
+            # Update Jira ticket with provisioning completion
+            if self.jira_agent and self.state.get("jira_ticket"):
+                try:
+                    provisioned_resources = provisioning_result.get('provisioned_resources', [])
+                    self.jira_agent.update_ticket_progress(
+                        ticket_key=self.state["jira_ticket"].get('ticket_key'),
+                        phase="Azure Provisioning",
+                        status="completed",
+                        details={
+                            "total_resources": len(provisioned_resources),
+                            "resource_types": list(set([r.get('type') for r in provisioned_resources]))
+                        }
+                    )
+                except Exception as jira_error:
+                    self.logger.warning(f"Jira ticket update failed: {str(jira_error)}")
+
             # Phase 4: Documentation
             self.state["current_phase"] = WorkflowPhase.DOCUMENTATION.value
             documentation_result = self._execute_documentation(provisioning_result)
             self.state["results"]["documentation"] = documentation_result
 
+            # Update Jira ticket with documentation completion
+            if self.jira_agent and self.state.get("jira_ticket"):
+                try:
+                    self.jira_agent.update_ticket_progress(
+                        ticket_key=self.state["jira_ticket"].get('ticket_key'),
+                        phase="Documentation",
+                        status="completed",
+                        details={
+                            "document_path": documentation_result.get('document_path', 'N/A'),
+                            "format": documentation_result.get('format', 'markdown')
+                        }
+                    )
+                except Exception as jira_error:
+                    self.logger.warning(f"Jira ticket update failed: {str(jira_error)}")
+
             # Mark workflow as completed
             self.state["current_phase"] = WorkflowPhase.COMPLETED.value
             self.state["status"] = WorkflowStatus.COMPLETED.value
             self.state["end_time"] = datetime.utcnow().isoformat()
+
+            # Attach documentation to Jira and close ticket
+            if self.jira_agent and self.state.get("jira_ticket"):
+                try:
+                    # Collect documentation files
+                    doc_files = []
+                    doc_path = documentation_result.get('document_path')
+                    if doc_path and os.path.exists(doc_path):
+                        doc_files.append(doc_path)
+
+                    # Attach documentation files
+                    if doc_files:
+                        self.jira_agent.attach_documentation(
+                            ticket_key=self.state["jira_ticket"].get('ticket_key'),
+                            file_paths=doc_files
+                        )
+
+                    # Close ticket with summary
+                    self.jira_agent.close_ticket_with_summary(
+                        ticket_key=self.state["jira_ticket"].get('ticket_key'),
+                        workflow_state=self.state
+                    )
+                except Exception as jira_error:
+                    self.logger.warning(f"Jira ticket closure failed: {str(jira_error)}")
+
+            # Send email completion notification if email agent is configured
+            if self.email_agent:
+                try:
+                    self.email_agent.send_completion_notification(
+                        request_id=self.request_id,
+                        workflow_state=self.state
+                    )
+                    self.console.print("[green]✓ Completion notification email sent[/green]")
+                except Exception as email_error:
+                    self.logger.warning(f"Email completion notification failed: {str(email_error)}")
 
             self._display_summary()
 
@@ -309,6 +488,18 @@ class OrchestratorAgent:
             self.state["status"] = WorkflowStatus.FAILED.value
             self.state["current_phase"] = WorkflowPhase.FAILED.value
             self.state["end_time"] = datetime.utcnow().isoformat()
+
+            # Update Jira ticket with failure details
+            if self.jira_agent and self.state.get("jira_ticket"):
+                try:
+                    self.jira_agent.handle_failure(
+                        ticket_key=self.state["jira_ticket"].get('ticket_key'),
+                        error=e,
+                        phase=self.state.get("current_phase", "unknown"),
+                        workflow_state=self.state
+                    )
+                except Exception as jira_error:
+                    self.logger.warning(f"Jira failure update failed: {str(jira_error)}")
 
             self.logger.error(f"Workflow {self.request_id} failed: {str(e)}")
             self.console.print(f"[bold red]Workflow execution failed: {str(e)}[/bold red]")
@@ -350,6 +541,78 @@ class OrchestratorAgent:
             duration = end - start
             return f"{duration.total_seconds():.2f} seconds"
         return "N/A"
+
+    def _wait_for_dual_approval(self, ticket_key: str, poll_interval: int = 10, timeout: int = 600) -> Dict[str, Any]:
+        """
+        Wait for approval from either Jira or Email channels.
+        Returns as soon as approval/rejection is received from any channel.
+
+        Args:
+            ticket_key: Jira ticket key
+            poll_interval: Seconds between polls
+            timeout: Maximum seconds to wait
+
+        Returns:
+            Dict with approved, comment, approver, timestamp, source
+        """
+        import time
+
+        start_time = time.time()
+        elapsed = 0
+
+        self.console.print(f"\n[cyan]⏳ Waiting for approval via Jira or Email (timeout: {timeout}s)...[/cyan]")
+
+        while elapsed < timeout:
+            # Check Jira for approval
+            if self.jira_agent:
+                try:
+                    jira_result = self.jira_agent.wait_for_approval(
+                        ticket_key=ticket_key,
+                        poll_interval=0,  # Don't wait, just check once
+                        timeout=poll_interval
+                    )
+
+                    # If we got a definitive answer from Jira, return it
+                    if jira_result.get('approved') is not None:
+                        jira_result['source'] = 'jira'
+                        self.console.print(f"[green]✓ Approval received via Jira[/green]")
+                        return jira_result
+                except Exception as e:
+                    self.logger.debug(f"Jira check failed: {str(e)}")
+
+            # Check Email for approval
+            if self.email_agent:
+                try:
+                    email_result = self.email_agent.check_for_approval_response(
+                        request_id=self.request_id,
+                        poll_interval=0,  # Don't wait, just check once
+                        timeout=poll_interval
+                    )
+
+                    # If we got a definitive answer from Email, return it
+                    if email_result.get('approved') is not None:
+                        email_result['source'] = 'email'
+                        self.console.print(f"[green]✓ Approval received via Email[/green]")
+                        return email_result
+                except Exception as e:
+                    self.logger.debug(f"Email check failed: {str(e)}")
+
+            # Wait before next poll
+            time.sleep(poll_interval)
+            elapsed = time.time() - start_time
+
+            if int(elapsed) % 30 == 0:  # Log every 30 seconds
+                self.console.print(f"[dim]⏱ Still waiting... ({int(elapsed)}s elapsed)[/dim]")
+
+        # Timeout - no approval received
+        self.console.print(f"[red]✗ Approval timeout after {timeout}s[/red]")
+        return {
+            'approved': False,
+            'comment': f'Approval timeout after {timeout} seconds',
+            'approver': 'system',
+            'timestamp': datetime.utcnow().isoformat(),
+            'source': 'timeout'
+        }
 
     def get_state(self) -> Dict[str, Any]:
         """

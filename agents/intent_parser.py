@@ -1,31 +1,64 @@
 """
-Intent Parser Agent - Parses natural language requests using OpenAI GPT-4o-mini
+Intent Parser Agent - Parses natural language requests using OpenAI or Azure OpenAI
 """
 import json
 import logging
 import re
 from typing import Dict, Any, Optional
-from openai import OpenAI
+from openai import OpenAI, AzureOpenAI
 from rich.console import Console
 
 
 class IntentParserAgent:
     """
-    Intent Parser Agent that uses OpenAI GPT-4o-mini to parse natural language
+    Intent Parser Agent that uses OpenAI or Azure OpenAI to parse natural language
     requests into structured data for Azure resource provisioning.
     """
 
-    def __init__(self, api_key: str):
+    def __init__(
+        self,
+        provider: str = "openai",
+        api_key: Optional[str] = None,
+        model: Optional[str] = None,
+        azure_endpoint: Optional[str] = None,
+        azure_deployment: Optional[str] = None,
+        azure_api_version: Optional[str] = None
+    ):
         """
         Initialize the Intent Parser Agent.
 
         Args:
-            api_key: OpenAI API key for authentication
+            provider: "openai" or "azure_openai"
+            api_key: OpenAI/Azure OpenAI API key
+            model: Model name (for OpenAI) or None (for Azure OpenAI, uses deployment)
+            azure_endpoint: Azure OpenAI endpoint (only for Azure OpenAI)
+            azure_deployment: Azure OpenAI deployment name (only for Azure OpenAI)
+            azure_api_version: Azure OpenAI API version (only for Azure OpenAI)
         """
-        self.client = OpenAI(api_key=api_key)
+        self.provider = provider.lower()
         self.logger = logging.getLogger(__name__)
         self.console = Console()
-        self.model = "gpt-4o-mini"
+
+        if self.provider == "azure_openai":
+            # Initialize Azure OpenAI client
+            if not all([api_key, azure_endpoint, azure_deployment]):
+                raise ValueError("Azure OpenAI requires api_key, azure_endpoint, and azure_deployment")
+
+            self.client = AzureOpenAI(
+                api_key=api_key,
+                azure_endpoint=azure_endpoint,
+                api_version=azure_api_version or "2024-02-15-preview"
+            )
+            self.model = azure_deployment  # For Azure, we use the deployment name
+            self.logger.info(f"Initialized Azure OpenAI client with deployment: {azure_deployment}")
+        else:
+            # Initialize standard OpenAI client
+            if not api_key:
+                raise ValueError("OpenAI requires api_key")
+
+            self.client = OpenAI(api_key=api_key)
+            self.model = model or "gpt-4o-mini"
+            self.logger.info(f"Initialized OpenAI client with model: {self.model}")
 
     def _create_system_prompt(self) -> str:
         """
@@ -211,6 +244,11 @@ Return only the JSON object with resource_type, purpose, name_hint, properties, 
             # Add metadata
             parsed_data["raw_request"] = user_request
             parsed_data["model_used"] = self.model
+            parsed_data["usage"] = {
+                "prompt_tokens": response.usage.prompt_tokens,
+                "completion_tokens": response.usage.completion_tokens,
+                "total_tokens": response.usage.total_tokens
+            }
             parsed_data["tokens_used"] = {
                 "prompt": response.usage.prompt_tokens,
                 "completion": response.usage.completion_tokens,
