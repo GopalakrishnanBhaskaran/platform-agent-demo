@@ -1,0 +1,13 @@
+create a new skill “repurpose-youtube-video”
+
+create an AI social media manager that makes social media posts for linkedin, instagram, and X
+
+user inputs a YouTube video URL and want sit to be turned into a LinkedIn post, instagram post, and X (twitter post), and each one should have a visual optimized for that social media platform.
+
+use Blotato for extraction, creating visuals, and publishing to socials: https://help.blotato.com/api/llm
+
+Create a .env file for me to upload my BLOTATO_API_KEY. Never ask for my API key to be shared in the chat.
+
+maintain separate file with a running log of my published posts and their live URLs
+
+ask me clarifying questions, one at a time, until you are 95% confident you can complete the task successfully

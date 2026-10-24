@@ -189,6 +189,7 @@ The intent parser can handle complex requests:
 - **[WORKING_PROMPTS.md](WORKING_PROMPTS.md)** - All tested prompts with examples
 - **[AUTH_ERROR_EXPLAINED.md](AUTH_ERROR_EXPLAINED.md)** - Unity Catalog authentication details
 - **[CONSOLE_OUTPUT_EXAMPLE.md](CONSOLE_OUTPUT_EXAMPLE.md)** - Example console outputs
+- **[docs/claude-usage-reference.md](docs/claude-usage-reference.md)** - Claude Code practices distilled from the course videos (with a CLAUDE.md starter block)
 
 ## 🐛 Troubleshooting
 
