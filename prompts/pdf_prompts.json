@@ -1,0 +1,2563 @@
+[
+  {
+    "id": "G01-P01",
+    "type": "template",
+    "verbatim": false,
+    "label": "Vapi lead-qualifier assistant: system prompt structure",
+    "prompt": "Include:\n1. Identity: who the assistant is (example: \"Elliot, outbound lead qualifier for Upit\").\n2. Style + response guidelines: concise, natural, professional.\n3. Prospect variables: use double curly braces for dynamic values.\n   - {{lead_name}}\n   - {{lead_company_name}}\n   - {{lead_request}}\n4. Conversation flow + required topics:\n   - Interest confirmation\n   - Motivation\n   - Urgency / timing\n   - Past experience\n   - Budget\n   - Paid intent (filter tire kickers)\n5. Edge cases:\n   - Wrong number\n   - Not a good time\n   - User says stop\n6. End call behavior: enable the built-in \"end call\" function.",
+    "pdf_name": "I Built a Voice Agent That Calls Every New Lead (n8n + Vapi).pdf",
+    "pdf_link": "https://drive.google.com/file/d/1i3kRrLFr0OueAUIBDK0VrcYOuTpAXN97/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 4,
+        "publish_date": "2026-01-12",
+        "video_title": "I Built a Voice Agent That Calls Every New Lead (n8n + Vapi)",
+        "resources_link": "https://drive.google.com/drive/folders/153-dVBo9XpK4_MxiVf-xV7JNEt11gxnt"
+      }
+    ]
+  },
+  {
+    "id": "G02-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Plan Mode brain dump (example)",
+    "prompt": "Scrape YouTube channels in the AI niche and create a branded slide deck.",
+    "pdf_name": "Master 95% of Claude Code (as a beginner).pdf",
+    "pdf_link": "https://drive.google.com/file/d/1Hf6hqKSXFNhMoQ76QXF9-cd9fwDQpR0q/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 10,
+        "publish_date": "2026-01-21",
+        "video_title": "Master 95% of Claude Code in 36 Mins (as a beginner)",
+        "resources_link": "https://drive.google.com/drive/folders/1zUMhDia2fY3ohHH6aanT_GW1FZnCzzur"
+      }
+    ]
+  },
+  {
+    "id": "G02-P02",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Deploy to Modal on a schedule",
+    "prompt": "Push this workflow to Modal to run every Monday at 6 AM.",
+    "pdf_name": "Master 95% of Claude Code (as a beginner).pdf",
+    "pdf_link": "https://drive.google.com/file/d/1Hf6hqKSXFNhMoQ76QXF9-cd9fwDQpR0q/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 10,
+        "publish_date": "2026-01-21",
+        "video_title": "Master 95% of Claude Code in 36 Mins (as a beginner)",
+        "resources_link": "https://drive.google.com/drive/folders/1zUMhDia2fY3ohHH6aanT_GW1FZnCzzur"
+      }
+    ]
+  },
+  {
+    "id": "G03-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Test the n8n MCP connection in Claude Code",
+    "prompt": "List my n8n workflows",
+    "pdf_name": "Self-Healing n8n Workflows Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1tseklEu_h7qqVAGTW-gXkwWl7cZ-8ym4/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 11,
+        "publish_date": "2026-01-22",
+        "video_title": "I Will Never Fix Another n8n Workflow (Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/1jPxiiS0AJd3BQTa2TgaHpipMw_IKw6ba"
+      }
+    ]
+  },
+  {
+    "id": "G03-P02",
+    "type": "template",
+    "verbatim": true,
+    "label": "Bridge server prompt sent to Claude Code when an n8n workflow fails",
+    "prompt": "An n8n workflow has failed and needs to be fixed.\nWORKFLOW INFO:\n- Workflow ID: ${workflow.id}\n- Workflow Name: ${workflow.name}\n- Execution ID: ${executionId}\n- Failed Node: ${lastNode}\n- Error Message: ${errorMessage}\nYOUR TASK:\n1. Use n8n_get_workflow with id \"${workflow.id}\" to fetch the workflow\n2. Analyze what went wrong\n3. Use n8n_update_partial_workflow to apply the fix\n4. Explain what you fixed and why",
+    "pdf_name": "Self-Healing n8n Workflows Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1tseklEu_h7qqVAGTW-gXkwWl7cZ-8ym4/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 11,
+        "publish_date": "2026-01-22",
+        "video_title": "I Will Never Fix Another n8n Workflow (Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/1jPxiiS0AJd3BQTa2TgaHpipMw_IKw6ba"
+      }
+    ]
+  },
+  {
+    "id": "G03-P03",
+    "type": "system",
+    "verbatim": true,
+    "label": "CLAUDE.md for the n8n workflow auto-fixer agent",
+    "prompt": "# n8n Workflow Auto-Fixer\nYou are an autonomous n8n workflow repair agent.\n## Your Mission\n1. Fetch the workflow to understand its structure\n2. Analyze the error to identify the root cause\n3. Apply the fix using the MCP tools\n4. Verify the fix is correct\n**Apply fixes directly without asking for permission.**\n## Tools to Use\n- n8n_get_workflow - ALWAYS first, fetch the workflow\n- n8n_update_partial_workflow - Apply targeted fixes\n- n8n_validate_workflow - Verify the fix\n## Common Fixes\n- \"Cannot read properties of undefined\" → Add optional chaining (?.)\n- \"is not a function\" → Fix method name\n- \"Unexpected token\" → Fix syntax errors\n- Expression errors → Fix n8n expression syntax",
+    "pdf_name": "Self-Healing n8n Workflows Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1tseklEu_h7qqVAGTW-gXkwWl7cZ-8ym4/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 11,
+        "publish_date": "2026-01-22",
+        "video_title": "I Will Never Fix Another n8n Workflow (Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/1jPxiiS0AJd3BQTa2TgaHpipMw_IKw6ba"
+      }
+    ]
+  },
+  {
+    "id": "G04-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Natural-language \"remote control\" refinements",
+    "prompt": "make that faster\nmake it cheaper\nadd a manual review step here\nlog all outputs to this Google Sheet",
+    "pdf_name": "The Shift to Agentic AI Workflows.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1vaa_Yb5PwKUXkMpL7v3OMK9aa3XxZByA/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 12,
+        "publish_date": "2026-01-25",
+        "video_title": "Agentic Workflows Just Changed AI Automation Forever! (Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/1vJYIcW0eVO4tJY_w5EqGYpnR3G2xa30m"
+      }
+    ]
+  },
+  {
+    "id": "G04-P02",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Guardrail instructions",
+    "prompt": "Never send customer phone numbers to any third-party tool.\nAlways stop this workflow if you exceed $5 of API usage.",
+    "pdf_name": "The Shift to Agentic AI Workflows.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1vaa_Yb5PwKUXkMpL7v3OMK9aa3XxZByA/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 12,
+        "publish_date": "2026-01-25",
+        "video_title": "Agentic Workflows Just Changed AI Automation Forever! (Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/1vJYIcW0eVO4tJY_w5EqGYpnR3G2xa30m"
+      }
+    ]
+  },
+  {
+    "id": "G04-P03",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Integration request",
+    "prompt": "Get my Fireflies transcripts, push them into ClickUp, and send me a Gmail summary.",
+    "pdf_name": "The Shift to Agentic AI Workflows.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1vaa_Yb5PwKUXkMpL7v3OMK9aa3XxZByA/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 12,
+        "publish_date": "2026-01-25",
+        "video_title": "Agentic Workflows Just Changed AI Automation Forever! (Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/1vJYIcW0eVO4tJY_w5EqGYpnR3G2xa30m"
+      }
+    ]
+  },
+  {
+    "id": "G04-P04",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Lead generation build request (Plan Mode)",
+    "prompt": "Help me build a lead generation automation. I want to scrape dentists in Chicago so I can reach out and offer my AI automation services. Do research, scrape leads, write personalized outreach, and put all data in a Google Sheet.",
+    "pdf_name": "The Shift to Agentic AI Workflows.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1vaa_Yb5PwKUXkMpL7v3OMK9aa3XxZByA/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 12,
+        "publish_date": "2026-01-25",
+        "video_title": "Agentic Workflows Just Changed AI Automation Forever! (Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/1vJYIcW0eVO4tJY_w5EqGYpnR3G2xa30m"
+      }
+    ]
+  },
+  {
+    "id": "G04-P05",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Iteration follow-ups",
+    "prompt": "Expand to California\nMake outreach more personalized\nAdd email addresses\nIncorporate this PDF about my business",
+    "pdf_name": "The Shift to Agentic AI Workflows.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1vaa_Yb5PwKUXkMpL7v3OMK9aa3XxZByA/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 12,
+        "publish_date": "2026-01-25",
+        "video_title": "Agentic Workflows Just Changed AI Automation Forever! (Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/1vJYIcW0eVO4tJY_w5EqGYpnR3G2xa30m"
+      }
+    ]
+  },
+  {
+    "id": "G05-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Install the Firecrawl MCP server",
+    "prompt": "Hey Claude, I want you to help me install the Firecrawl MCP server. You need to install it using this command... [paste the install command]",
+    "pdf_name": "How I’d Teach a 10 Year Old to Build Agentic Workflows (Claude Code).pdf",
+    "pdf_link": "https://drive.google.com/file/d/1hbHsWU1lydI6Ja76FRQ4j1B1JDrrV8gY/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 18,
+        "publish_date": "2026-02-07",
+        "video_title": "How Iâ€™d Teach a 10 Year Old to Build Agentic Workflows (Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/10RU0oHWIw2Cy5-rXOKw4iUD3LuMCDXLp"
+      }
+    ]
+  },
+  {
+    "id": "G05-P02",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Scrape job listings into Excel (Plan Mode)",
+    "prompt": "Hey Claude, I just gave you a URL for a website that has a bunch of job opportunities. There are about 622 job opportunities here, but they're spread across 21 pages. I want you to scrape all of those for me and put them into an Excel sheet. Make sure you're getting all of the relevant fields. Let me know if you can help me make that project requirement more robust, and feel free to ask me any questions.",
+    "pdf_name": "How I’d Teach a 10 Year Old to Build Agentic Workflows (Claude Code).pdf",
+    "pdf_link": "https://drive.google.com/file/d/1hbHsWU1lydI6Ja76FRQ4j1B1JDrrV8gY/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 18,
+        "publish_date": "2026-02-07",
+        "video_title": "How Iâ€™d Teach a 10 Year Old to Build Agentic Workflows (Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/10RU0oHWIw2Cy5-rXOKw4iUD3LuMCDXLp"
+      }
+    ]
+  },
+  {
+    "id": "G05-P03",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Turn a rough idea into a PRD (Plan Mode)",
+    "prompt": "Hey, here's a rough idea of what I want. Help me turn this into a solid project requirement doc (PRD).",
+    "pdf_name": "How I’d Teach a 10 Year Old to Build Agentic Workflows (Claude Code).pdf",
+    "pdf_link": "https://drive.google.com/file/d/1hbHsWU1lydI6Ja76FRQ4j1B1JDrrV8gY/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 18,
+        "publish_date": "2026-02-07",
+        "video_title": "How Iâ€™d Teach a 10 Year Old to Build Agentic Workflows (Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/10RU0oHWIw2Cy5-rXOKw4iUD3LuMCDXLp"
+      }
+    ]
+  },
+  {
+    "id": "G05-P04",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Define what \"done\" looks like",
+    "prompt": "I need exactly 75 LinkedIn profiles of CEOs at tech companies. Put them in a spreadsheet with their name, company, email, and profile link. Once you have 75, you're done.",
+    "pdf_name": "How I’d Teach a 10 Year Old to Build Agentic Workflows (Claude Code).pdf",
+    "pdf_link": "https://drive.google.com/file/d/1hbHsWU1lydI6Ja76FRQ4j1B1JDrrV8gY/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 18,
+        "publish_date": "2026-02-07",
+        "video_title": "How Iâ€™d Teach a 10 Year Old to Build Agentic Workflows (Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/10RU0oHWIw2Cy5-rXOKw4iUD3LuMCDXLp"
+      }
+    ]
+  },
+  {
+    "id": "G06-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Connect to the Firecrawl MCP server (key kept in .env)",
+    "prompt": "Hey Claude, I want to connect to Firecrawl's MCP server. You can do that using this command. But I'm not going to give you my API key, I'm just going to put it in a .env. So if you could create that file for me, I will put my API key in there. Then go ahead and initialize and connect to Firecrawl's MCP server.",
+    "pdf_name": "Scrape Any Website with Claude Code + Firecrawl.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1sa4lK73ygu8RqqjHP6yvUoLCTc0K_E1v/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 19,
+        "publish_date": "2026-02-11",
+        "video_title": "Turn Any Website Into LLM Ready Data INSTANTLY",
+        "resources_link": "https://drive.google.com/drive/folders/17IXJBlb4HBNy5w1cPrjE3k56itSPMVy5"
+      }
+    ]
+  },
+  {
+    "id": "G06-P02",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Create a Firecrawl cheat sheet",
+    "prompt": "Create a Firecrawl cheat sheet as a markdown file in this project that you can look at. It should tell you about the different tools and how to use them.",
+    "pdf_name": "Scrape Any Website with Claude Code + Firecrawl.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1sa4lK73ygu8RqqjHP6yvUoLCTc0K_E1v/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 19,
+        "publish_date": "2026-02-11",
+        "video_title": "Turn Any Website Into LLM Ready Data INSTANTLY",
+        "resources_link": "https://drive.google.com/drive/folders/17IXJBlb4HBNy5w1cPrjE3k56itSPMVy5"
+      }
+    ]
+  },
+  {
+    "id": "G06-P03",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Set up CLAUDE.md for a scraping project",
+    "prompt": "Help me set up a CLAUDE.md file for this project. This project is specifically for scraping data, extracting it, getting screenshots, crawling everything, mapping everything. You have access to the Firecrawl MCP server and the firecrawl-cheatsheet.md which explains how that MCP server works and when to use each tool.",
+    "pdf_name": "Scrape Any Website with Claude Code + Firecrawl.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1sa4lK73ygu8RqqjHP6yvUoLCTc0K_E1v/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 19,
+        "publish_date": "2026-02-11",
+        "video_title": "Turn Any Website Into LLM Ready Data INSTANTLY",
+        "resources_link": "https://drive.google.com/drive/folders/17IXJBlb4HBNy5w1cPrjE3k56itSPMVy5"
+      }
+    ]
+  },
+  {
+    "id": "G06-P04",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Scrape 1,700 job listings as structured data",
+    "prompt": "I found this website and I've got about 1,700 job opportunities I want to look at. But I need help using the Firecrawl MCP server to get all of these listed out. I want these as structured data so I could throw them into a Google Sheet.",
+    "pdf_name": "Scrape Any Website with Claude Code + Firecrawl.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1sa4lK73ygu8RqqjHP6yvUoLCTc0K_E1v/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 19,
+        "publish_date": "2026-02-11",
+        "video_title": "Turn Any Website Into LLM Ready Data INSTANTLY",
+        "resources_link": "https://drive.google.com/drive/folders/17IXJBlb4HBNy5w1cPrjE3k56itSPMVy5"
+      }
+    ]
+  },
+  {
+    "id": "G06-P05",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Screenshots and branding analysis",
+    "prompt": "Please grab screenshots of this page and help me understand the branding.",
+    "pdf_name": "Scrape Any Website with Claude Code + Firecrawl.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1sa4lK73ygu8RqqjHP6yvUoLCTc0K_E1v/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 19,
+        "publish_date": "2026-02-11",
+        "video_title": "Turn Any Website Into LLM Ready Data INSTANTLY",
+        "resources_link": "https://drive.google.com/drive/folders/17IXJBlb4HBNy5w1cPrjE3k56itSPMVy5"
+      }
+    ]
+  },
+  {
+    "id": "G06-P06",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Map a full website",
+    "prompt": "Go ahead and map out this site for me and show me what it looks like.",
+    "pdf_name": "Scrape Any Website with Claude Code + Firecrawl.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1sa4lK73ygu8RqqjHP6yvUoLCTc0K_E1v/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 19,
+        "publish_date": "2026-02-11",
+        "video_title": "Turn Any Website Into LLM Ready Data INSTANTLY",
+        "resources_link": "https://drive.google.com/drive/folders/17IXJBlb4HBNy5w1cPrjE3k56itSPMVy5"
+      }
+    ]
+  },
+  {
+    "id": "G07-P01",
+    "type": "system",
+    "verbatim": true,
+    "label": "CLAUDE.md rule: always use the front-end design skill",
+    "prompt": "Always invoke the front-end design skill before writing any front-end code every session, no exceptions.",
+    "pdf_name": "5 Hacks to Build Professional Websites with Claude Code.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1d7OIERyIa-pBetGGSILC9gPM3iYfOKkE/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 22,
+        "publish_date": "2026-02-19",
+        "video_title": "Building Beautiful Websites with Claude Code Is Too Easy",
+        "resources_link": "https://drive.google.com/drive/folders/1V5H7yxrUnA6C0hmSxVMtJL5-MF3q2I4l"
+      }
+    ]
+  },
+  {
+    "id": "G07-P02",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "One-sentence landing page build",
+    "prompt": "Build me a modern and professional landing page for AI Automation Society",
+    "pdf_name": "5 Hacks to Build Professional Websites with Claude Code.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1d7OIERyIa-pBetGGSILC9gPM3iYfOKkE/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 22,
+        "publish_date": "2026-02-19",
+        "video_title": "Building Beautiful Websites with Claude Code Is Too Easy",
+        "resources_link": "https://drive.google.com/drive/folders/1V5H7yxrUnA6C0hmSxVMtJL5-MF3q2I4l"
+      }
+    ]
+  },
+  {
+    "id": "G07-P03",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Set up the Puppeteer screenshot loop",
+    "prompt": "Hey, can you set up Puppeteer to take screenshots?",
+    "pdf_name": "5 Hacks to Build Professional Websites with Claude Code.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1d7OIERyIa-pBetGGSILC9gPM3iYfOKkE/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 22,
+        "publish_date": "2026-02-19",
+        "video_title": "Building Beautiful Websites with Claude Code Is Too Easy",
+        "resources_link": "https://drive.google.com/drive/folders/1V5H7yxrUnA6C0hmSxVMtJL5-MF3q2I4l"
+      }
+    ]
+  },
+  {
+    "id": "G07-P04",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Clone a reference website (with screenshot + styles attached)",
+    "prompt": "I want you to spin up a new website. Clone this website. Here's a screenshot and here's the style.",
+    "pdf_name": "5 Hacks to Build Professional Websites with Claude Code.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1d7OIERyIa-pBetGGSILC9gPM3iYfOKkE/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 22,
+        "publish_date": "2026-02-19",
+        "video_title": "Building Beautiful Websites with Claude Code Is Too Easy",
+        "resources_link": "https://drive.google.com/drive/folders/1V5H7yxrUnA6C0hmSxVMtJL5-MF3q2I4l"
+      }
+    ]
+  },
+  {
+    "id": "G07-P05",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Apply your branding to the clone",
+    "prompt": "The most recent landing page looks really good. Work in our brand assets, our brand guidelines and AIS logo. This is for our community called AI Automation Society.",
+    "pdf_name": "5 Hacks to Build Professional Websites with Claude Code.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1d7OIERyIa-pBetGGSILC9gPM3iYfOKkE/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 22,
+        "publish_date": "2026-02-19",
+        "video_title": "Building Beautiful Websites with Claude Code Is Too Easy",
+        "resources_link": "https://drive.google.com/drive/folders/1V5H7yxrUnA6C0hmSxVMtJL5-MF3q2I4l"
+      }
+    ]
+  },
+  {
+    "id": "G07-P06",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Add a 21st.dev component",
+    "prompt": "I want you to work in this background element right behind the hero text [paste the copied component code]",
+    "pdf_name": "5 Hacks to Build Professional Websites with Claude Code.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1d7OIERyIa-pBetGGSILC9gPM3iYfOKkE/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 22,
+        "publish_date": "2026-02-19",
+        "video_title": "Building Beautiful Websites with Claude Code Is Too Easy",
+        "resources_link": "https://drive.google.com/drive/folders/1V5H7yxrUnA6C0hmSxVMtJL5-MF3q2I4l"
+      }
+    ]
+  },
+  {
+    "id": "G07-P07",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Disable screenshot comparison for animated components",
+    "prompt": "Because this is an animated background, do not use the screenshot tool to compare. Just work in the code and I will let you know if we need to make any changes.",
+    "pdf_name": "5 Hacks to Build Professional Websites with Claude Code.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1d7OIERyIa-pBetGGSILC9gPM3iYfOKkE/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 22,
+        "publish_date": "2026-02-19",
+        "video_title": "Building Beautiful Websites with Claude Code Is Too Easy",
+        "resources_link": "https://drive.google.com/drive/folders/1V5H7yxrUnA6C0hmSxVMtJL5-MF3q2I4l"
+      }
+    ]
+  },
+  {
+    "id": "G07-P08",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Specific design feedback (example)",
+    "prompt": "The background animation is too distracting and pixelated. The hero text is hard to read. Add a background behind the hero text for contrast. Change 'earn more' to blue instead of orange.",
+    "pdf_name": "5 Hacks to Build Professional Websites with Claude Code.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1d7OIERyIa-pBetGGSILC9gPM3iYfOKkE/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 22,
+        "publish_date": "2026-02-19",
+        "video_title": "Building Beautiful Websites with Claude Code Is Too Easy",
+        "resources_link": "https://drive.google.com/drive/folders/1V5H7yxrUnA6C0hmSxVMtJL5-MF3q2I4l"
+      }
+    ]
+  },
+  {
+    "id": "G07-P09",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Push the site to GitHub",
+    "prompt": "This site looks good. Help me push this to GitHub to a repository called [repo name].",
+    "pdf_name": "5 Hacks to Build Professional Websites with Claude Code.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1d7OIERyIa-pBetGGSILC9gPM3iYfOKkE/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 22,
+        "publish_date": "2026-02-19",
+        "video_title": "Building Beautiful Websites with Claude Code Is Too Easy",
+        "resources_link": "https://drive.google.com/drive/folders/1V5H7yxrUnA6C0hmSxVMtJL5-MF3q2I4l"
+      }
+    ]
+  },
+  {
+    "id": "G07-P10",
+    "type": "system",
+    "verbatim": true,
+    "label": "CLAUDE.md rule: test locally before pushing",
+    "prompt": "When making changes, always test on localhost first. Don't commit or push to GitHub until I explicitly tell you to.",
+    "pdf_name": "5 Hacks to Build Professional Websites with Claude Code.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1d7OIERyIa-pBetGGSILC9gPM3iYfOKkE/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 22,
+        "publish_date": "2026-02-19",
+        "video_title": "Building Beautiful Websites with Claude Code Is Too Easy",
+        "resources_link": "https://drive.google.com/drive/folders/1V5H7yxrUnA6C0hmSxVMtJL5-MF3q2I4l"
+      }
+    ]
+  },
+  {
+    "id": "G08-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Vague automation request (dental-practice lead finder)",
+    "prompt": "I need you to build me an automation that goes off every single Monday and searches the web to find me dental practices that I can sell websites to.",
+    "pdf_name": "Claude Code + Trigger.dev.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1UWpTQBcbUvZ2YZHZ9eQEVi0RHLTn_wlk/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 23,
+        "publish_date": "2026-02-20",
+        "video_title": "The EASIEST Way to Host Your Claude Code Agents",
+        "resources_link": "https://drive.google.com/drive/folders/1fFYXra4_Cs69fnwcmTZ3CBuG9OaYtCP-"
+      }
+    ]
+  },
+  {
+    "id": "G08-P02",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Follow-up question to the ClickUp research agent",
+    "prompt": "Does this company have a recent valuation?",
+    "pdf_name": "Claude Code + Trigger.dev.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1UWpTQBcbUvZ2YZHZ9eQEVi0RHLTn_wlk/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 23,
+        "publish_date": "2026-02-20",
+        "video_title": "The EASIEST Way to Host Your Claude Code Agents",
+        "resources_link": "https://drive.google.com/drive/folders/1fFYXra4_Cs69fnwcmTZ3CBuG9OaYtCP-"
+      }
+    ]
+  },
+  {
+    "id": "G08-P03",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Fix duplicate leads",
+    "prompt": "I did a test run and some leads were duplicates. Can you fix the idempotency logic?",
+    "pdf_name": "Claude Code + Trigger.dev.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1UWpTQBcbUvZ2YZHZ9eQEVi0RHLTn_wlk/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 23,
+        "publish_date": "2026-02-20",
+        "video_title": "The EASIEST Way to Host Your Claude Code Agents",
+        "resources_link": "https://drive.google.com/drive/folders/1fFYXra4_Cs69fnwcmTZ3CBuG9OaYtCP-"
+      }
+    ]
+  },
+  {
+    "id": "G09-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Task for a WAT-framework agent (example)",
+    "prompt": "Research Company X's pricing and create a PDF report",
+    "pdf_name": "From Zero to Your First Agentic AI Workflow in 26 Minutes (Claude Code).pdf",
+    "pdf_link": "https://drive.google.com/file/d/1_Teg6pVDM3RJ0uPr56wnVJGQntNX_UZ9/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 24,
+        "publish_date": "2026-02-23",
+        "video_title": "From Zero to Your First Agentic AI Workflow in 26 Minutes (Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/1vBWsH1jwku4DdTsb8AqLgXAkeLFdyYe1"
+      }
+    ]
+  },
+  {
+    "id": "G09-P02",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Initialize a project from a dropped-in CLAUDE.md",
+    "prompt": "Hey Claude, I just dropped in a CLAUDE.md file that explains how I want you to work in this project. Go ahead and initialize the project and get everything set up and ask me any questions if you have any.",
+    "pdf_name": "From Zero to Your First Agentic AI Workflow in 26 Minutes (Claude Code).pdf",
+    "pdf_link": "https://drive.google.com/file/d/1_Teg6pVDM3RJ0uPr56wnVJGQntNX_UZ9/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 24,
+        "publish_date": "2026-02-23",
+        "video_title": "From Zero to Your First Agentic AI Workflow in 26 Minutes (Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/1vBWsH1jwku4DdTsb8AqLgXAkeLFdyYe1"
+      }
+    ]
+  },
+  {
+    "id": "G09-P03",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Plan a competitor analysis workflow with a branded PDF (Plan Mode)",
+    "prompt": "Hey Claude, I've got an idea for a workflow. I want a branded PDF at the end -- I'll give you my company logo and brand guidelines, and the output should have my logo, colors, and typography. It's a competitor analysis and research workflow. I want to give you information about my business, and based on that, you need to find competitors, find areas to improve my business, see what's working well for them, and build me a good way to keep tabs on the market.",
+    "pdf_name": "From Zero to Your First Agentic AI Workflow in 26 Minutes (Claude Code).pdf",
+    "pdf_link": "https://drive.google.com/file/d/1_Teg6pVDM3RJ0uPr56wnVJGQntNX_UZ9/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 24,
+        "publish_date": "2026-02-23",
+        "video_title": "From Zero to Your First Agentic AI Workflow in 26 Minutes (Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/1vBWsH1jwku4DdTsb8AqLgXAkeLFdyYe1"
+      }
+    ]
+  },
+  {
+    "id": "G09-P04",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Point the plan at your brand assets",
+    "prompt": "That plan looks good. The only change I want to make is about the brand guidelines and assets. I just dropped in two files -- [logo file] and [brand guidelines file]. Those are the ones I want you to use for the branded PDF. Look at those, extract the information, and make sure the logo and colors appear on the final output.",
+    "pdf_name": "From Zero to Your First Agentic AI Workflow in 26 Minutes (Claude Code).pdf",
+    "pdf_link": "https://drive.google.com/file/d/1_Teg6pVDM3RJ0uPr56wnVJGQntNX_UZ9/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 24,
+        "publish_date": "2026-02-23",
+        "video_title": "From Zero to Your First Agentic AI Workflow in 26 Minutes (Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/1vBWsH1jwku4DdTsb8AqLgXAkeLFdyYe1"
+      }
+    ]
+  },
+  {
+    "id": "G09-P05",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Run the competitor analysis",
+    "prompt": "Hey Claude, I need you to help me run a competitor analysis. My business is called [Business Name] and we basically help you [description]. We're starting to see competitors pop up, so I want to understand our opportunities and what we need to be doing better.",
+    "pdf_name": "From Zero to Your First Agentic AI Workflow in 26 Minutes (Claude Code).pdf",
+    "pdf_link": "https://drive.google.com/file/d/1_Teg6pVDM3RJ0uPr56wnVJGQntNX_UZ9/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 24,
+        "publish_date": "2026-02-23",
+        "video_title": "From Zero to Your First Agentic AI Workflow in 26 Minutes (Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/1vBWsH1jwku4DdTsb8AqLgXAkeLFdyYe1"
+      }
+    ]
+  },
+  {
+    "id": "G09-P06",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Fix invisible charts/logos in the PDF",
+    "prompt": "That's great, but we can't see the charts or logos. I'm assuming because they're the same color as the background. Investigate and fix these issues.",
+    "pdf_name": "From Zero to Your First Agentic AI Workflow in 26 Minutes (Claude Code).pdf",
+    "pdf_link": "https://drive.google.com/file/d/1_Teg6pVDM3RJ0uPr56wnVJGQntNX_UZ9/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 24,
+        "publish_date": "2026-02-23",
+        "video_title": "From Zero to Your First Agentic AI Workflow in 26 Minutes (Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/1vBWsH1jwku4DdTsb8AqLgXAkeLFdyYe1"
+      }
+    ]
+  },
+  {
+    "id": "G10-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Build a real-time voice agent with Gemini 3.1 Flash Live (Claude Code)",
+    "prompt": "Build me a real-time voice agent using Google Gemini 3.1 Flash Live.\nArchitecture:\n- Python FastAPI server as a WebSocket relay between browser and Gemini\n- Use the google-genai Python SDK (not raw WebSockets from the browser)\n- Model: gemini-3.1-flash-live-preview\n- Audio: PCM16, 16kHz mono input / 24kHz mono output\n- CRITICAL: Use send_realtime_input(audio=blob) not media=blob\nServer (FastAPI):\n- /ws WebSocket endpoint\n- Two async tasks: browser_to_gemini() and gemini_to_browser()\n- Run both with asyncio.gather()\n- Load GOOGLE_API_KEY from .env\n- Serve static files from public/\n- System prompt with [YOUR AGENT KNOWLEDGE]\n- [Optional: tool declarations + TOOLS dict + execute_tool()]\nBrowser protocol:\n- Send: {type: \"audio\", data: \"<base64 pcm16>\"}\n- Receive: audio, status, turn_complete, interrupted, error\nAudio in browser:\n- Mic: getUserMedia at 16kHz, convert Float32->Int16->base64\n- Playback: decode base64->Int16->Float32, schedule at 24kHz\n- clearQueue() for instant barge-in (disconnect/reconnect gain node)\n- All AudioContext creation inside click handler (autoplay policy)",
+    "pdf_name": "Gemini 3.1 Flash x Claude Code.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1gDAHjSqt7rjxSIwA2IYFUok3_CY0W_5k/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 48,
+        "publish_date": "2026-03-28",
+        "video_title": "Gemini 3.1 Flash Live Just Changed Voice Agents Forever",
+        "resources_link": "https://drive.google.com/drive/folders/1Mbq4I-1zqlSUxVEMzOkHnxNVY3A_vQ9r"
+      }
+    ]
+  },
+  {
+    "id": "G10-P02",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Voice commands for the Aria executive assistant",
+    "prompt": "What's on my calendar today?\nSchedule a meeting for Friday at 2pm\nWhat workspaces do I have in ClickUp?\nCreate a task called Review Q2 Report\nUpdate that task to high priority\nClose the task",
+    "pdf_name": "Gemini 3.1 Flash x Claude Code.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1gDAHjSqt7rjxSIwA2IYFUok3_CY0W_5k/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 48,
+        "publish_date": "2026-03-28",
+        "video_title": "Gemini 3.1 Flash Live Just Changed Voice Agents Forever",
+        "resources_link": "https://drive.google.com/drive/folders/1Mbq4I-1zqlSUxVEMzOkHnxNVY3A_vQ9r"
+      }
+    ]
+  },
+  {
+    "id": "G10-P03",
+    "type": "system",
+    "verbatim": true,
+    "label": "System prompt line for a new tool",
+    "prompt": "You can check the weather for any city.",
+    "pdf_name": "Gemini 3.1 Flash x Claude Code.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1gDAHjSqt7rjxSIwA2IYFUok3_CY0W_5k/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 48,
+        "publish_date": "2026-03-28",
+        "video_title": "Gemini 3.1 Flash Live Just Changed Voice Agents Forever",
+        "resources_link": "https://drive.google.com/drive/folders/1Mbq4I-1zqlSUxVEMzOkHnxNVY3A_vQ9r"
+      }
+    ]
+  },
+  {
+    "id": "G11-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "First task for the Paperclip CEO agent",
+    "prompt": "Create a hiring plan and build out the team.",
+    "pdf_name": "Run an AI First Business with Paperclip.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1mRH8dPfflj7eRdsWXRaidsF9znMO5qC3/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 49,
+        "publish_date": "2026-03-28",
+        "video_title": "Claude Code + Paperclip Just Destroyed OpenClaw",
+        "resources_link": "https://drive.google.com/drive/folders/16Q-59pQFeYe1Um84JDScO8irGBkVgGsL"
+      }
+    ]
+  },
+  {
+    "id": "G11-P02",
+    "type": "template",
+    "verbatim": true,
+    "label": "SKILL.md frontmatter template",
+    "prompt": "---\nname: skill-name\ndescription: Use this skill when the agent needs to [specific trigger]\n---\n[Detailed instructions in markdown]",
+    "pdf_name": "Run an AI First Business with Paperclip.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1mRH8dPfflj7eRdsWXRaidsF9znMO5qC3/view",
+    "videos": [
+      {
+        "quarter": "Q1 2026",
+        "sheet_row": 49,
+        "publish_date": "2026-03-28",
+        "video_title": "Claude Code + Paperclip Just Destroyed OpenClaw",
+        "resources_link": "https://drive.google.com/drive/folders/16Q-59pQFeYe1Um84JDScO8irGBkVgGsL"
+      }
+    ]
+  },
+  {
+    "id": "G12-P01",
+    "type": "system",
+    "verbatim": true,
+    "label": "CLAUDE.md rules: short, opinionated, operational (examples)",
+    "prompt": "We use TypeScript strict mode. Always.\nTests go in test folders next to the source file.\nNever modify the database schema without running migrations.\nUse PNPM, not npm.",
+    "pdf_name": "All of Claude Code Just Leaked… Here's How to Become a Top 1% User.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1y23jucSkEwpxD9QCM1Mr9Q4kVkCOh103/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 2,
+        "publish_date": "2026-04-01",
+        "video_title": "Claude Code Source Code Just Leakedâ€¦ 8 Things You Must Do",
+        "resources_link": "https://drive.google.com/drive/folders/14V5Xym3SWQ8RUUScGF5X-YY4sGmIYjFb"
+      }
+    ]
+  },
+  {
+    "id": "G13-P01",
+    "type": "prompt",
+    "verbatim": false,
+    "label": "Batch multi-step instructions into one prompt",
+    "prompt": "Summarize this, extract the issues, and suggest a fix.",
+    "pdf_name": "Context Management.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1U9qfQ0m462TBRDbB89CMCJVVVUM_4kVW/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 4,
+        "publish_date": "2026-04-02",
+        "video_title": "18 Claude Code Token Hacks in 18 Minutes",
+        "resources_link": "https://drive.google.com/drive/folders/1otBAvqeuLexmyNxEIUSnhkcVp2yB5bNb"
+      },
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 5,
+        "publish_date": "2026-07-11",
+        "video_title": "Claude Code for Non-Coders (6 Hour Course)",
+        "resources_link": "https://drive.google.com/drive/folders/1DcIwNSK_qMq4Dw0C3Ao5qlWyIpacjrb-"
+      }
+    ]
+  },
+  {
+    "id": "G13-P02",
+    "type": "system",
+    "verbatim": true,
+    "label": "CLAUDE.md rule: 95% confidence before building",
+    "prompt": "Do not make any changes until you have 95% confidence in what you need to build. Ask me follow-up questions until you reach that confidence.",
+    "pdf_name": "Context Management.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1U9qfQ0m462TBRDbB89CMCJVVVUM_4kVW/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 4,
+        "publish_date": "2026-04-02",
+        "video_title": "18 Claude Code Token Hacks in 18 Minutes",
+        "resources_link": "https://drive.google.com/drive/folders/1otBAvqeuLexmyNxEIUSnhkcVp2yB5bNb"
+      },
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 5,
+        "publish_date": "2026-07-11",
+        "video_title": "Claude Code for Non-Coders (6 Hour Course)",
+        "resources_link": "https://drive.google.com/drive/folders/1DcIwNSK_qMq4Dw0C3Ao5qlWyIpacjrb-"
+      }
+    ]
+  },
+  {
+    "id": "G13-P03",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Surgical file reference (instead of \"here's my whole repo, go find the bug\")",
+    "prompt": "Check the verifyUser function inside auth.js.",
+    "pdf_name": "Context Management.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1U9qfQ0m462TBRDbB89CMCJVVVUM_4kVW/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 4,
+        "publish_date": "2026-04-02",
+        "video_title": "18 Claude Code Token Hacks in 18 Minutes",
+        "resources_link": "https://drive.google.com/drive/folders/1otBAvqeuLexmyNxEIUSnhkcVp2yB5bNb"
+      },
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 5,
+        "publish_date": "2026-07-11",
+        "video_title": "Claude Code for Non-Coders (6 Hour Course)",
+        "resources_link": "https://drive.google.com/drive/folders/1DcIwNSK_qMq4Dw0C3Ao5qlWyIpacjrb-"
+      }
+    ]
+  },
+  {
+    "id": "G13-P04",
+    "type": "system",
+    "verbatim": true,
+    "label": "CLAUDE.md rule: use subagents for exploration",
+    "prompt": "Use subagents for any exploration or research. If a task needs 3+ files or multi-file analysis, spawn a subagent and return only summarized insights.",
+    "pdf_name": "Context Management.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1U9qfQ0m462TBRDbB89CMCJVVVUM_4kVW/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 4,
+        "publish_date": "2026-04-02",
+        "video_title": "18 Claude Code Token Hacks in 18 Minutes",
+        "resources_link": "https://drive.google.com/drive/folders/1otBAvqeuLexmyNxEIUSnhkcVp2yB5bNb"
+      },
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 5,
+        "publish_date": "2026-07-11",
+        "video_title": "Claude Code for Non-Coders (6 Hour Course)",
+        "resources_link": "https://drive.google.com/drive/folders/1DcIwNSK_qMq4Dw0C3Ao5qlWyIpacjrb-"
+      }
+    ]
+  },
+  {
+    "id": "G14-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Pick an Ollama model for your hardware",
+    "prompt": "I have [X GB RAM / GPU], what Ollama model sizes can I run?",
+    "pdf_name": "Running Claude Code for Free_ Two Methods.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1ZvXDXNxUchFMJ-bNeIZxFGknhdqWTLyg/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 5,
+        "publish_date": "2026-04-04",
+        "video_title": "Ollama + Claude Code = 99% CHEAPER",
+        "resources_link": "https://drive.google.com/drive/folders/1RSZmdxLSiqH8jlCf-dIAJ3Zoo_bVW_Hp"
+      }
+    ]
+  },
+  {
+    "id": "G15-P01",
+    "type": "system",
+    "verbatim": true,
+    "label": "Superpowers rule enforced by the using-superpowers skill",
+    "prompt": "If there's even a 1% chance a skill applies, invoke it before doing anything.",
+    "pdf_name": "Give Claude Code Superpowers.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1bqIKIE-BREFI6kAXrBDcyV-GtzqQdCMq/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 13,
+        "publish_date": "2026-04-12",
+        "video_title": "Unlock the Next Evolution of Claude Code with One Plugin",
+        "resources_link": "https://drive.google.com/drive/folders/14FLA0lcBqKzNVY5VpBtppxo6_LNyiN4H"
+      }
+    ]
+  },
+  {
+    "id": "G15-P02",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Nudge Claude to use Superpowers skills (append to a prompt)",
+    "prompt": "Hey, make sure you're using any of the superpower skills that might be relevant here",
+    "pdf_name": "Give Claude Code Superpowers.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1bqIKIE-BREFI6kAXrBDcyV-GtzqQdCMq/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 13,
+        "publish_date": "2026-04-12",
+        "video_title": "Unlock the Next Evolution of Claude Code with One Plugin",
+        "resources_link": "https://drive.google.com/drive/folders/14FLA0lcBqKzNVY5VpBtppxo6_LNyiN4H"
+      }
+    ]
+  },
+  {
+    "id": "G15-P03",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Example build requests that trigger the Superpowers chain",
+    "prompt": "build me a login page\nAdd a dark mode toggle",
+    "pdf_name": "Give Claude Code Superpowers.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1bqIKIE-BREFI6kAXrBDcyV-GtzqQdCMq/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 13,
+        "publish_date": "2026-04-12",
+        "video_title": "Unlock the Next Evolution of Claude Code with One Plugin",
+        "resources_link": "https://drive.google.com/drive/folders/14FLA0lcBqKzNVY5VpBtppxo6_LNyiN4H"
+      }
+    ]
+  },
+  {
+    "id": "G15-P04",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Re-prompt when Claude skips a step",
+    "prompt": "check your skills",
+    "pdf_name": "Give Claude Code Superpowers.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1bqIKIE-BREFI6kAXrBDcyV-GtzqQdCMq/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 13,
+        "publish_date": "2026-04-12",
+        "video_title": "Unlock the Next Evolution of Claude Code with One Plugin",
+        "resources_link": "https://drive.google.com/drive/folders/14FLA0lcBqKzNVY5VpBtppxo6_LNyiN4H"
+      }
+    ]
+  },
+  {
+    "id": "G16-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Test 1: one-shot habit tracker app",
+    "prompt": "Build a full-stack habit tracker app with a dashboard that shows streaks, a calendar heat map, and the ability to add, edit, and delete habits.",
+    "pdf_name": "Claude Code vs Antigravity.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1YlobG7ixs2NLOi__GH7MLbKjoMgzHVT_/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 14,
+        "publish_date": "2026-04-13",
+        "video_title": "Claude Code vs Google Antigravity... Which is Better?",
+        "resources_link": "https://drive.google.com/drive/folders/1CkR5P-kfzjxiJXveCiGPYrzzXd7ZPyC4"
+      }
+    ]
+  },
+  {
+    "id": "G16-P02",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Test 2: AI trends PDF report (Plan Mode)",
+    "prompt": "Research AI trends in the SMB market and create a 3-page PDF report with a holistic breakdown.",
+    "pdf_name": "Claude Code vs Antigravity.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1YlobG7ixs2NLOi__GH7MLbKjoMgzHVT_/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 14,
+        "publish_date": "2026-04-13",
+        "video_title": "Claude Code vs Google Antigravity... Which is Better?",
+        "resources_link": "https://drive.google.com/drive/folders/1CkR5P-kfzjxiJXveCiGPYrzzXd7ZPyC4"
+      }
+    ]
+  },
+  {
+    "id": "G16-P03",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Test 3: landing page design",
+    "prompt": "Design a landing page for a premium AI automation course targeted at agency owners. Include a hero section, social proof, a pricing table, and a CTA.",
+    "pdf_name": "Claude Code vs Antigravity.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1YlobG7ixs2NLOi__GH7MLbKjoMgzHVT_/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 14,
+        "publish_date": "2026-04-13",
+        "video_title": "Claude Code vs Google Antigravity... Which is Better?",
+        "resources_link": "https://drive.google.com/drive/folders/1CkR5P-kfzjxiJXveCiGPYrzzXd7ZPyC4"
+      }
+    ]
+  },
+  {
+    "id": "G17-P01",
+    "type": "system",
+    "verbatim": true,
+    "label": "CLAUDE.md rules for routines (examples)",
+    "prompt": "always run tests before pushing\nnever modify the auth module without flagging it",
+    "pdf_name": "Claude Code Routines.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1nG_sTkEt6tFk_bgtfGPO7XNBd7_nPqfK/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 15,
+        "publish_date": "2026-04-14",
+        "video_title": "Claude Code Finally Gave Us Scheduled Automations",
+        "resources_link": "https://drive.google.com/drive/folders/1gk3WhEGd3GpQsq2YgCWbtH4hqgIb0Wwn"
+      },
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 5,
+        "publish_date": "2026-07-11",
+        "video_title": "Claude Code for Non-Coders (6 Hour Course)",
+        "resources_link": "https://drive.google.com/drive/folders/1DcIwNSK_qMq4Dw0C3Ao5qlWyIpacjrb-"
+      }
+    ]
+  },
+  {
+    "id": "G17-P02",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Example routine prompts by trigger type",
+    "prompt": "Every weeknight at 9pm, triage new issues\nWhen Sentry fires an alert, Claude diagnoses and opens a fix PR\nOn every new PR, run my team's review checklist",
+    "pdf_name": "Claude Code Routines.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1nG_sTkEt6tFk_bgtfGPO7XNBd7_nPqfK/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 15,
+        "publish_date": "2026-04-14",
+        "video_title": "Claude Code Finally Gave Us Scheduled Automations",
+        "resources_link": "https://drive.google.com/drive/folders/1gk3WhEGd3GpQsq2YgCWbtH4hqgIb0Wwn"
+      },
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 5,
+        "publish_date": "2026-07-11",
+        "video_title": "Claude Code for Non-Coders (6 Hour Course)",
+        "resources_link": "https://drive.google.com/drive/folders/1DcIwNSK_qMq4Dw0C3Ao5qlWyIpacjrb-"
+      }
+    ]
+  },
+  {
+    "id": "G17-P03",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Routine fix: read API keys from the cloud environment",
+    "prompt": "My YouTube API key is available as an environment variable. Use it directly from the environment. Don't look for a .env.",
+    "pdf_name": "Claude Code Routines.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1nG_sTkEt6tFk_bgtfGPO7XNBd7_nPqfK/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 15,
+        "publish_date": "2026-04-14",
+        "video_title": "Claude Code Finally Gave Us Scheduled Automations",
+        "resources_link": "https://drive.google.com/drive/folders/1gk3WhEGd3GpQsq2YgCWbtH4hqgIb0Wwn"
+      },
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 5,
+        "publish_date": "2026-07-11",
+        "video_title": "Claude Code for Non-Coders (6 Hour Course)",
+        "resources_link": "https://drive.google.com/drive/folders/1DcIwNSK_qMq4Dw0C3Ao5qlWyIpacjrb-"
+      }
+    ]
+  },
+  {
+    "id": "G17-P04",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Good routine prompt: fix flaky tests (instead of \"Fix flaky tests\")",
+    "prompt": "Scan src/tests/ for tests that have failed intermittently in the last 5 CI runs, identify the root cause, and open a fix PR for each.",
+    "pdf_name": "Claude Code Routines.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1nG_sTkEt6tFk_bgtfGPO7XNBd7_nPqfK/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 15,
+        "publish_date": "2026-04-14",
+        "video_title": "Claude Code Finally Gave Us Scheduled Automations",
+        "resources_link": "https://drive.google.com/drive/folders/1gk3WhEGd3GpQsq2YgCWbtH4hqgIb0Wwn"
+      },
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 5,
+        "publish_date": "2026-07-11",
+        "video_title": "Claude Code for Non-Coders (6 Hour Course)",
+        "resources_link": "https://drive.google.com/drive/folders/1DcIwNSK_qMq4Dw0C3Ao5qlWyIpacjrb-"
+      }
+    ]
+  },
+  {
+    "id": "G17-P05",
+    "type": "prompt",
+    "verbatim": false,
+    "label": "Routine prompt building blocks",
+    "prompt": "Success: All modified tests should pass locally before pushing.\nBoundaries: Only modify files in src/utils/. Do not touch the API layer.\nOutput format: Push changes to a claude/fix-flaky-tests branch and open a draft PR with a summary.\nOn failure: If X fails, log the error and stop. / If X fails, try Y.\nFallback: If this fails, send me a Slack message.",
+    "pdf_name": "Claude Code Routines.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1nG_sTkEt6tFk_bgtfGPO7XNBd7_nPqfK/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 15,
+        "publish_date": "2026-04-14",
+        "video_title": "Claude Code Finally Gave Us Scheduled Automations",
+        "resources_link": "https://drive.google.com/drive/folders/1gk3WhEGd3GpQsq2YgCWbtH4hqgIb0Wwn"
+      },
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 5,
+        "publish_date": "2026-07-11",
+        "video_title": "Claude Code for Non-Coders (6 Hour Course)",
+        "resources_link": "https://drive.google.com/drive/folders/1DcIwNSK_qMq4Dw0C3Ao5qlWyIpacjrb-"
+      }
+    ]
+  },
+  {
+    "id": "G18-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Bootstrap: set up the whole trading-bot project from this guide",
+    "prompt": "Set up this project per the guide. Start with Part 10's replication checklist. Ask me for credentials only when needed.",
+    "pdf_name": "Opus 4.7 Trading Bot — Setup Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 18,
+        "publish_date": "2026-04-17",
+        "video_title": "I Turned Claude Opus 4.7 Into a 24/7 Trader",
+        "resources_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view?usp=sharing"
+      }
+    ]
+  },
+  {
+    "id": "G18-P02",
+    "type": "template",
+    "verbatim": true,
+    "label": "Cloud routine prompt scaffold (8-section template)",
+    "prompt": "[PERSONA LINE — who the agent is, the mission, one-line core rule]\nYou are running the [WORKFLOW NAME] workflow. Resolve today's date via:\nDATE=$(date +%Y-%m-%d).\nIMPORTANT — ENVIRONMENT VARIABLES:\n- Every API key is ALREADY exported as a process env var:\n [list all required vars for this workflow]\n- There is NO .env file in this repo and you MUST NOT create, write,\n or source one.\n- If a wrapper prints \"KEY not set in environment\" -> STOP, send one\n ClickUp alert naming which var is missing, then exit. Do NOT try\n to create a .env as a workaround.\n- Verify env vars BEFORE any wrapper call:\n for v in VAR1 VAR2 ...; do\n [[ -n \"${!v:-}\" ]] && echo \"$v: set\" || echo \"$v: MISSING\"\n done\nIMPORTANT — PERSISTENCE:\n- This workspace is a fresh clone. File changes VANISH unless you\n commit and push to main. You MUST commit and push at the end.\nSTEP 1 — Read memory: [which files, what to look for]\nSTEP 2 — Pull live state: [which wrapper calls]\nSTEP 3..N-2 — Do the work; write memory as you go\nSTEP N-1 — Notification via ClickUp (conditional per workflow)\nSTEP N — COMMIT AND PUSH (mandatory):\n git add memory/<files touched>\n git commit -m \"<tag> $DATE\"\n git push origin main\n On push failure from divergence:\n git pull --rebase origin main\n then push again. Never force-push.",
+    "pdf_name": "Opus 4.7 Trading Bot — Setup Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 18,
+        "publish_date": "2026-04-17",
+        "video_title": "I Turned Claude Opus 4.7 Into a 24/7 Trader",
+        "resources_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view?usp=sharing"
+      }
+    ]
+  },
+  {
+    "id": "G18-P03",
+    "type": "system",
+    "verbatim": true,
+    "label": "CLAUDE.md starter for the trading bot agent",
+    "prompt": "# Trading Bot Agent Instructions\nYou are an autonomous AI trading bot managing a LIVE ~$10,000 Alpaca account.\nYour goal is to beat the S&P 500 over the challenge window. You are aggressive\nbut disciplined. Stocks only — no options, ever. Communicate ultra-concise:\nshort bullets, no fluff.\n## Read-Me-First (every session)\nOpen these in order before doing anything:\n- memory/TRADING-STRATEGY.md — Your rulebook. Never violate.\n- memory/TRADE-LOG.md     — Tail for open positions, entries, stops.\n- memory/RESEARCH-LOG.md    — Today's research before any trade.\n- memory/PROJECT-CONTEXT.md — Overall mission and context.\n- memory/WEEKLY-REVIEW.md   — Friday afternoons; template for new entries.\n## Daily Workflows\nDefined in .claude/commands/ (local) and routines/ (cloud). Five scheduled\nruns per trading day plus two ad-hoc helpers.\n## Strategy Hard Rules (quick reference)\n- NO OPTIONS — ever.\n- Max 5-6 open positions.\n- Max 20% per position.\n- Max 3 new trades per week.\n- 75-85% capital deployed.\n- 10% trailing stop on every position as a real GTC order.\n- Cut losers at -7% manually.\n- Tighten trail to 7% at +15%, to 5% at +20%.\n- Never within 3% of current price. Never move a stop down.\n- Follow sector momentum. Exit a sector after 2 failed trades.\n- Patience > activity.\n## API Wrappers\nUse bash scripts/alpaca.sh, scripts/perplexity.sh, scripts/clickup.sh.\nNever curl these APIs directly.\n## Communication Style\nUltra concise. No preamble. Short bullets. Match existing memory file\nformats exactly — don't reinvent tables.",
+    "pdf_name": "Opus 4.7 Trading Bot — Setup Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 18,
+        "publish_date": "2026-04-17",
+        "video_title": "I Turned Claude Opus 4.7 Into a 24/7 Trader",
+        "resources_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view?usp=sharing"
+      }
+    ]
+  },
+  {
+    "id": "G18-P04",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Routine F.1: pre-market research (cron 0 6 * * 1-5)",
+    "prompt": " You are an autonomous trading bot managing a LIVE ~$10,000 Alpaca account.\n Hard rule: stocks only — NEVER touch options. Ultra-concise: short bullets,\n no fluff.\n You are running the pre-market research workflow. Resolve today's date via:\nDATE=$(date +%Y-%m-%d).\nIMPORTANT — ENVIRONMENT VARIABLES:\n- Every API key is ALREADY exported as a process env var: ALPACA_API_KEY,\n  ALPACA_SECRET_KEY, ALPACA_ENDPOINT, ALPACA_DATA_ENDPOINT,\n  PERPLEXITY_API_KEY, PERPLEXITY_MODEL, CLICKUP_API_KEY,\n  CLICKUP_WORKSPACE_ID, CLICKUP_CHANNEL_ID.\n- There is NO .env file in this repo and you MUST NOT create, write, or\n  source one. The wrapper scripts read directly from the process env.\n- If a wrapper prints \"KEY not set in environment\" -> STOP, send one\n  ClickUp alert naming the missing var, and exit.\n- Verify env vars BEFORE any wrapper call:\n  for v in ALPACA_API_KEY ALPACA_SECRET_KEY PERPLEXITY_API_KEY \\\n  CLICKUP_API_KEY CLICKUP_WORKSPACE_ID CLICKUP_CHANNEL_ID; do\n  [[ -n \"${!v:-}\" ]] && echo \"$v: set\" || echo \"$v: MISSING\"\n  done\nIMPORTANT — PERSISTENCE:\n- Fresh clone. File changes VANISH unless committed and pushed.\n  MUST commit and push at STEP 6.\nSTEP 1 — Read memory for context:\n- memory/TRADING-STRATEGY.md\n- tail of memory/TRADE-LOG.md\n- tail of memory/RESEARCH-LOG.md\nSTEP 2 — Pull live account state:\n bash scripts/alpaca.sh account\n bash scripts/alpaca.sh positions\n bash scripts/alpaca.sh orders\nSTEP 3 — Research market context via Perplexity. Run\nbash scripts/perplexity.sh \"<query>\" for each:\n- \"WTI and Brent oil price right now\"\n- \"S&P 500 futures premarket today\"\n- \"VIX level today\"\n- \"Top stock market catalysts today $DATE\"\n- \"Earnings reports today before market open\"\n- \"Economic calendar today CPI PPI FOMC jobs data\"\n- \"S&P 500 sector momentum YTD\"\n- News on any currently-held ticker\nIf Perplexity exits 3, fall back to native WebSearch and note the\nfallback in the log entry.\nSTEP 4 — Write a dated entry to memory/RESEARCH-LOG.md:\n- Account snapshot (equity, cash, buying power, daytrade count)\n- Market context (oil, indices, VIX, today's releases)\n- 2-3 actionable trade ideas WITH catalyst + entry/stop/target\n- Risk factors for the day\n- Decision: trade or HOLD (default HOLD — patience > activity)\nSTEP 5 — Notification: silent unless urgent.\n bash scripts/clickup.sh \"<one line>\"\nSTEP 6 — COMMIT AND PUSH (mandatory):\n  git add memory/RESEARCH-LOG.md\n  git commit -m \"pre-market research $DATE\"\n  git push origin main\n On push failure: git pull --rebase origin main, then push again.\n Never force-push.",
+    "pdf_name": "Opus 4.7 Trading Bot — Setup Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 18,
+        "publish_date": "2026-04-17",
+        "video_title": "I Turned Claude Opus 4.7 Into a 24/7 Trader",
+        "resources_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view?usp=sharing"
+      }
+    ]
+  },
+  {
+    "id": "G18-P05",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Routine F.2: market-open execution (cron 30 8 * * 1-5)",
+    "prompt": "You are an autonomous trading bot. Stocks only — NEVER options. Ultra-concise.\nYou are running the market-open execution workflow. Resolve today's date via:\nDATE=$(date +%Y-%m-%d).\nIMPORTANT — ENVIRONMENT VARIABLES:\n[same env block as pre-market]\nIMPORTANT — PERSISTENCE:\n[same persistence block as pre-market, push at STEP 8]\nSTEP 1 — Read memory for today's plan:\n- memory/TRADING-STRATEGY.md\n- TODAY's entry in memory/RESEARCH-LOG.md (if missing, run pre-market\n STEPS 1-3 inline)\n- tail of memory/TRADE-LOG.md (for weekly trade count)\nSTEP 2 — Re-validate with live data:\n bash scripts/alpaca.sh account\n bash scripts/alpaca.sh positions\n bash scripts/alpaca.sh quote <each planned ticker>\nSTEP 3 — Hard-check rules BEFORE every order. Skip any trade that fails\nand log the reason:\n- Total positions after trade <= 6\n- Trades this week <= 3\n- Position cost <= 20% of equity\n- Catalyst documented in today's RESEARCH-LOG\n- daytrade_count leaves room (PDT: 3/5 rolling business days)\nSTEP 4 — Execute the buys (market orders, day TIF):\n bash scripts/alpaca.sh order '{\"symbol\":\"SYM\",\"qty\":\"N\",\"side\":\"buy\",\"type\":\"market\",\"time_in_force\":\"day\"}'\nWait for fill confirmation before placing the stop.\nSTEP 5 — Immediately place 10% trailing stop GTC for each new position:\n bash scripts/alpaca.sh order\n'{\"symbol\":\"SYM\",\"qty\":\"N\",\"side\":\"sell\",\"type\":\"trailing_stop\",\"trail_percent\":\"10\",\"time_in_force\":\"gtc\"}'\nIf Alpaca rejects with PDT error, fall back to fixed stop 10% below entry:\n bash scripts/alpaca.sh order\n'{\"symbol\":\"SYM\",\"qty\":\"N\",\"side\":\"sell\",\"type\":\"stop\",\"stop_price\":\"X.XX\",\"time_in_force\":\"gtc\"}'\nIf also blocked, queue the stop in TRADE-LOG as \"PDT-blocked, set tomorrow AM\".\nSTEP 6 — Append each trade to memory/TRADE-LOG.md (matching existing format):\nDate, ticker, side, shares, entry price, stop level, thesis, target, R:R.\nSTEP 7 — Notification: only if a trade was placed.\n bash scripts/clickup.sh \"<tickers, shares, fill prices, one-line why>\"\nSTEP 8 — COMMIT AND PUSH (mandatory if any trades executed):\n git add memory/TRADE-LOG.md\n git commit -m \"market-open trades $DATE\"\n git push origin main\nSkip commit if no trades fired. On push failure: rebase and retry.",
+    "pdf_name": "Opus 4.7 Trading Bot — Setup Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 18,
+        "publish_date": "2026-04-17",
+        "video_title": "I Turned Claude Opus 4.7 Into a 24/7 Trader",
+        "resources_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view?usp=sharing"
+      }
+    ]
+  },
+  {
+    "id": "G18-P06",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Routine F.3: midday scan (cron 0 12 * * 1-5)",
+    "prompt": "You are an autonomous trading bot. Stocks only — NEVER options. Ultra-concise.\nYou are running the midday scan workflow. Resolve today's date via:\nDATE=$(date +%Y-%m-%d).\nIMPORTANT — ENVIRONMENT VARIABLES: [same env block]\nIMPORTANT — PERSISTENCE: [same persistence block, push at STEP 8]\nSTEP 1 — Read memory so you know what's open and why:\n- memory/TRADING-STRATEGY.md (exit rules)\n- tail of memory/TRADE-LOG.md (entries, original thesis per position, stops)\n- today's memory/RESEARCH-LOG.md entry\nSTEP 2 — Pull current state:\n bash scripts/alpaca.sh positions\n bash scripts/alpaca.sh orders\nSTEP 3 — Cut losers immediately. For every position where\nunrealized_plpc <= -0.07:\n bash scripts/alpaca.sh close SYM\n bash scripts/alpaca.sh cancel ORDER_ID # cancel its trailing stop\nLog the exit to TRADE-LOG: exit price, realized P&L, \"cut at -7% per rule\".\nSTEP 4 — Tighten trailing stops on winners. For each eligible position,\ncancel old trailing stop, place new one:\n- Up >= +20% -> trail_percent: \"5\"\n- Up >= +15% -> trail_percent: \"7\"\nNever tighten within 3% of current price. Never move a stop down.\nSTEP 5 — Thesis check. If a thesis broke intraday, cut the position even\nif not at -7% yet. Document reasoning in TRADE-LOG.\nSTEP 6 — Optional intraday research via Perplexity if something is moving\nsharply with no obvious cause. Append afternoon addendum to RESEARCH-LOG.\nSTEP 7 — Notification: only if action was taken.\n bash scripts/clickup.sh \"<action summary>\"\nSTEP 8 — COMMIT AND PUSH (if any memory files changed):\n git add memory/TRADE-LOG.md memory/RESEARCH-LOG.md\n git commit -m \"midday scan $DATE\"\n git push origin main\nSkip commit if no-op. On push failure: rebase and retry.",
+    "pdf_name": "Opus 4.7 Trading Bot — Setup Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 18,
+        "publish_date": "2026-04-17",
+        "video_title": "I Turned Claude Opus 4.7 Into a 24/7 Trader",
+        "resources_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view?usp=sharing"
+      }
+    ]
+  },
+  {
+    "id": "G18-P07",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Routine F.4: daily summary (cron 0 15 * * 1-5)",
+    "prompt": "You are an autonomous trading bot. Stocks only. Ultra-concise.\nYou are running the daily summary workflow. Resolve today's date via:\nDATE=$(date +%Y-%m-%d).\nIMPORTANT — ENVIRONMENT VARIABLES: [same env block]\nIMPORTANT — PERSISTENCE: [same persistence block, push at STEP 6]\nSTEP 1 — Read memory for continuity:\n- tail of memory/TRADE-LOG.md (find most recent EOD snapshot -> yesterday's\n equity, needed for Day P&L)\n- Count TRADE-LOG entries dated today (for \"Trades today\")\n- Count trades Mon-today this week (for 3/week cap)\nSTEP 2 — Pull final state of the day:\n bash scripts/alpaca.sh account\n bash scripts/alpaca.sh positions\n bash scripts/alpaca.sh orders\nSTEP 3 — Compute metrics:\n- Day P&L ($ and %) = today_equity - yesterday_equity\n- Phase cumulative P&L ($ and %) = today_equity - starting_equity\n- Trades today (list or \"none\")\n- Trades this week (running total)\nSTEP 4 — Append EOD snapshot to memory/TRADE-LOG.md:\n### MMM DD — EOD Snapshot (Day N, Weekday)\n**Portfolio:** $X | **Cash:** $X (X%) | **Day P&L:** ±$X (±X%) | **Phase P&L:** ±$X (±X%)\n| Ticker | Shares | Entry | Close | Day Chg | Unrealized P&L | Stop |\n**Notes:** one-paragraph plain-english summary.\nSTEP 5 — Send ONE ClickUp message (always, even on no-trade days). <= 15 lines:\n bash scripts/clickup.sh \"EOD MMM DD\n Portfolio: \\$X (±X% day, ±X% phase)\n Cash: \\$X\n Trades today: <list or none>\n Open positions:\n SYM ±X.X% (stop \\$X.XX)\n Tomorrow: <one-line plan>\"\nSTEP 6 — COMMIT AND PUSH (mandatory — tomorrow's Day P&L depends on this):\n git add memory/TRADE-LOG.md\n git commit -m \"EOD snapshot $DATE\"\n git push origin main\nOn push failure: rebase and retry.",
+    "pdf_name": "Opus 4.7 Trading Bot — Setup Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 18,
+        "publish_date": "2026-04-17",
+        "video_title": "I Turned Claude Opus 4.7 Into a 24/7 Trader",
+        "resources_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view?usp=sharing"
+      }
+    ]
+  },
+  {
+    "id": "G18-P08",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Routine F.5: Friday weekly review (cron 0 16 * * 5)",
+    "prompt": " You are an autonomous trading bot. Stocks only. Ultra-concise.\n You are running the Friday weekly review workflow. Resolve today's date via:\n DATE=$(date +%Y-%m-%d).\nIMPORTANT — ENVIRONMENT VARIABLES: [same env block, include PERPLEXITY_API_KEY]\nIMPORTANT — PERSISTENCE: [same persistence block, push at STEP 7]\nSTEP 1 — Read memory for full week context:\n- memory/WEEKLY-REVIEW.md (match existing template exactly)\n- ALL this week's entries in memory/TRADE-LOG.md\n- ALL this week's entries in memory/RESEARCH-LOG.md\n- memory/TRADING-STRATEGY.md\nSTEP 2 — Pull week-end state:\n bash scripts/alpaca.sh account\n bash scripts/alpaca.sh positions\nSTEP 3 — Compute the week's metrics:\n- Starting portfolio (Monday AM equity)\n- Ending portfolio (today's equity)\n- Week return ($ and %)\n- S&P 500 week return:\n  bash scripts/perplexity.sh \"S&P 500 weekly performance week ending $DATE\"\n- Trades taken (W/L/open)\n- Win rate (closed trades only)\n- Best trade, worst trade\n- Profit factor (sum winners / |sum losers|)\nSTEP 4 — Append full review section to memory/WEEKLY-REVIEW.md:\n- Week stats table\n- Closed trades table\n- Open positions at week end\n- What worked (3-5 bullets)\n- What didn't work (3-5 bullets)\n- Key lessons learned\n- Adjustments for next week\n- Overall letter grade (A-F)\nSTEP 5 — If a rule needs to change (proven out for 2+ weeks, or failed\nbadly), also update memory/TRADING-STRATEGY.md and call out the change\nin the review.\nSTEP 6 — Send ONE ClickUp message. <= 15 lines:\n bash scripts/clickup.sh \"Week ending MMM DD\n Portfolio: \\$X (±X% week, ±X% phase)\n vs S&P 500: ±X%\n Trades: N (W:X / L:Y / open:Z)\n Best: SYM +X% Worst: SYM -X%\n One-line takeaway: <...>\n Grade: <letter>\"\nSTEP 7 — COMMIT AND PUSH (mandatory):\n  git add memory/WEEKLY-REVIEW.md memory/TRADING-STRATEGY.md\n  git commit -m \"weekly review $DATE\"\n  git push origin main\nIf TRADING-STRATEGY.md didn't change, add just WEEKLY-REVIEW.md.\nOn push failure: rebase and retry.",
+    "pdf_name": "Opus 4.7 Trading Bot — Setup Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 18,
+        "publish_date": "2026-04-17",
+        "video_title": "I Turned Claude Opus 4.7 Into a 24/7 Trader",
+        "resources_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view?usp=sharing"
+      }
+    ]
+  },
+  {
+    "id": "G18-P09",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Slash command /portfolio (.claude/commands/portfolio.md)",
+    "prompt": "---\ndescription: Read-only snapshot of account, positions, open orders, and stops\n---\nPrint a clean ad-hoc snapshot. No state changes, no orders, no file writes.\n1. bash scripts/alpaca.sh account\n2. bash scripts/alpaca.sh positions\n3. bash scripts/alpaca.sh orders\nFormat the output as a single concise summary:\nPortfolio — <today's date>\nEquity: $X | Cash: $X (X%) | Buying power: $X\nDaytrade count: N/4 | PDT: <bool>\nPositions:\n SYM | Sh | Entry -> Now | Unrealized P&L | Stop\nOpen orders:\n TYPE | SYM | qty | trail/stop | order_id\nNo commentary unless something is broken (position without a stop,\nor a stop below current price).",
+    "pdf_name": "Opus 4.7 Trading Bot — Setup Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 18,
+        "publish_date": "2026-04-17",
+        "video_title": "I Turned Claude Opus 4.7 Into a 24/7 Trader",
+        "resources_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view?usp=sharing"
+      }
+    ]
+  },
+  {
+    "id": "G18-P10",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Slash command /trade (.claude/commands/trade.md)",
+    "prompt": "---\ndescription: Manual trade helper with strategy-rule validation. Usage — /trade SYMBOL SHARES buy|sell\n---\nExecute a manual trade with full rule validation. Refuse if any rule fails.\nArgs: SYMBOL SHARES SIDE (buy or sell). If missing, ask.\n1. Pull state: account, positions, quote SYMBOL (capture ask price P).\n2. For BUY, validate:\n - Total positions after fill <= 6\n - Trades this week + 1 <= 3\n - SHARES * P <= 20% of equity\n - SHARES * P <= available cash\n - daytrade_count < 3\n - Catalyst documented (ask for thesis if not in today's RESEARCH-LOG)\n If any fail, STOP and print the failed checks.\n3. For SELL, confirm position exists with right qty. No other checks.\n4. Print order JSON + validation results, ask \"execute? (y/n)\".\n5. On confirm:\n bash scripts/alpaca.sh order '{\"symbol\":\"SYM\",\"qty\":\"N\",\"side\":\"buy|sell\",\"type\":\"market\",\"time_in_force\":\"day\"}'\n6. For BUYs, immediately place 10% trailing stop GTC (same flow as market-open).\n7. Log to memory/TRADE-LOG.md with full thesis, entry, stop, target, R:R.\n8. bash scripts/clickup.sh with trade details.",
+    "pdf_name": "Opus 4.7 Trading Bot — Setup Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 18,
+        "publish_date": "2026-04-17",
+        "video_title": "I Turned Claude Opus 4.7 Into a 24/7 Trader",
+        "resources_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view?usp=sharing"
+      }
+    ]
+  },
+  {
+    "id": "G18-P11",
+    "type": "system",
+    "verbatim": true,
+    "label": "Perplexity research wrapper system prompt",
+    "prompt": "You are a precise financial research assistant. Cite every claim. Be concise.",
+    "pdf_name": "Opus 4.7 Trading Bot — Setup Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 18,
+        "publish_date": "2026-04-17",
+        "video_title": "I Turned Claude Opus 4.7 Into a 24/7 Trader",
+        "resources_link": "https://drive.google.com/file/d/1XgwarwhlzcCPUAKVRzF7YiChfKLoLvHK/view?usp=sharing"
+      }
+    ]
+  },
+  {
+    "id": "G19-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Session handoff summary before /clear",
+    "prompt": "Give me a full summary of everything we've done and the current status of what we're about to do next.",
+    "pdf_name": "How to Never Hit Your Claude Limit Again.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1FSqpelOeFMZBsgr4yqredfZRidKi_I-x/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 21,
+        "publish_date": "2026-04-20",
+        "video_title": "How to Manage Your Claude Limits Better Than 99% of People",
+        "resources_link": "https://drive.google.com/drive/folders/1Gec-42rgEGFXpktKAwWLAqvaU--OuAhZ"
+      },
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 5,
+        "publish_date": "2026-07-11",
+        "video_title": "Claude Code for Non-Coders (6 Hour Course)",
+        "resources_link": "https://drive.google.com/drive/folders/1DcIwNSK_qMq4Dw0C3Ao5qlWyIpacjrb-"
+      }
+    ]
+  },
+  {
+    "id": "G19-P02",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Pick the right token-saving framework for this project",
+    "prompt": "Based on what we're doing in this specific project with this specific end goal, which of these would help us most?",
+    "pdf_name": "How to Never Hit Your Claude Limit Again.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1FSqpelOeFMZBsgr4yqredfZRidKi_I-x/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 21,
+        "publish_date": "2026-04-20",
+        "video_title": "How to Manage Your Claude Limits Better Than 99% of People",
+        "resources_link": "https://drive.google.com/drive/folders/1Gec-42rgEGFXpktKAwWLAqvaU--OuAhZ"
+      },
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 5,
+        "publish_date": "2026-07-11",
+        "video_title": "Claude Code for Non-Coders (6 Hour Course)",
+        "resources_link": "https://drive.google.com/drive/folders/1DcIwNSK_qMq4Dw0C3Ao5qlWyIpacjrb-"
+      }
+    ]
+  },
+  {
+    "id": "G20-P01",
+    "type": "template",
+    "verbatim": false,
+    "label": "Claude Design kickoff prompt checklist",
+    "prompt": "Tell Claude Design:\n- What the sketch represents (hero section only).\n- That the MP4 should loop as the hero background.\n- Where the hero text lives (left side).\n- The 20+ lines of brand identity you just pasted.\n- To write all the copy for every section now (\"we can tweak later\").",
+    "pdf_name": "How to Build Websites with Claude Design.pdf",
+    "pdf_link": "https://drive.google.com/file/d/12YO_j6gKWmYG0nYaTDZIvYL_pZL25tX5/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 22,
+        "publish_date": "2026-04-21",
+        "video_title": "Claude Design Builds Beautiful 3D Websites Instantly (full course)",
+        "resources_link": "https://drive.google.com/drive/folders/1IokjDhZPaLlAEQKRUWIdmMAZV58DQ7CS"
+      }
+    ]
+  },
+  {
+    "id": "G20-P02",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Targeted canvas comment (example)",
+    "prompt": "make this button gold",
+    "pdf_name": "How to Build Websites with Claude Design.pdf",
+    "pdf_link": "https://drive.google.com/file/d/12YO_j6gKWmYG0nYaTDZIvYL_pZL25tX5/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 22,
+        "publish_date": "2026-04-21",
+        "video_title": "Claude Design Builds Beautiful 3D Websites Instantly (full course)",
+        "resources_link": "https://drive.google.com/drive/folders/1IokjDhZPaLlAEQKRUWIdmMAZV58DQ7CS"
+      }
+    ]
+  },
+  {
+    "id": "G20-P03",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Draw-tool comment (example)",
+    "prompt": "don't like how this ends abruptly",
+    "pdf_name": "How to Build Websites with Claude Design.pdf",
+    "pdf_link": "https://drive.google.com/file/d/12YO_j6gKWmYG0nYaTDZIvYL_pZL25tX5/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 22,
+        "publish_date": "2026-04-21",
+        "video_title": "Claude Design Builds Beautiful 3D Websites Instantly (full course)",
+        "resources_link": "https://drive.google.com/drive/folders/1IokjDhZPaLlAEQKRUWIdmMAZV58DQ7CS"
+      }
+    ]
+  },
+  {
+    "id": "G20-P04",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "\"Magic unlock\" prompt for a Tweaks panel",
+    "prompt": "This is a really great iteration. I want to see what else is possible. Add a bunch of things that I can tweak, different colors, sliders, panels, and give me a bunch of things to play with.",
+    "pdf_name": "How to Build Websites with Claude Design.pdf",
+    "pdf_link": "https://drive.google.com/file/d/12YO_j6gKWmYG0nYaTDZIvYL_pZL25tX5/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 22,
+        "publish_date": "2026-04-21",
+        "video_title": "Claude Design Builds Beautiful 3D Websites Instantly (full course)",
+        "resources_link": "https://drive.google.com/drive/folders/1IokjDhZPaLlAEQKRUWIdmMAZV58DQ7CS"
+      }
+    ]
+  },
+  {
+    "id": "G20-P05",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Push the exported site to GitHub",
+    "prompt": "Push this to a private GitHub repository and call it whatever you want.",
+    "pdf_name": "How to Build Websites with Claude Design.pdf",
+    "pdf_link": "https://drive.google.com/file/d/12YO_j6gKWmYG0nYaTDZIvYL_pZL25tX5/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 22,
+        "publish_date": "2026-04-21",
+        "video_title": "Claude Design Builds Beautiful 3D Websites Instantly (full course)",
+        "resources_link": "https://drive.google.com/drive/folders/1IokjDhZPaLlAEQKRUWIdmMAZV58DQ7CS"
+      }
+    ]
+  },
+  {
+    "id": "G20-P06",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Test on localhost",
+    "prompt": "Make sure the website works as expected and open it up in a local host for me to view.",
+    "pdf_name": "How to Build Websites with Claude Design.pdf",
+    "pdf_link": "https://drive.google.com/file/d/12YO_j6gKWmYG0nYaTDZIvYL_pZL25tX5/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 22,
+        "publish_date": "2026-04-21",
+        "video_title": "Claude Design Builds Beautiful 3D Websites Instantly (full course)",
+        "resources_link": "https://drive.google.com/drive/folders/1IokjDhZPaLlAEQKRUWIdmMAZV58DQ7CS"
+      }
+    ]
+  },
+  {
+    "id": "G20-P07",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Fix a Vercel 404",
+    "prompt": "I just pushed to GitHub, synced to Vercel, and got a 404. What does this mean? How do I fix it?",
+    "pdf_name": "How to Build Websites with Claude Design.pdf",
+    "pdf_link": "https://drive.google.com/file/d/12YO_j6gKWmYG0nYaTDZIvYL_pZL25tX5/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 22,
+        "publish_date": "2026-04-21",
+        "video_title": "Claude Design Builds Beautiful 3D Websites Instantly (full course)",
+        "resources_link": "https://drive.google.com/drive/folders/1IokjDhZPaLlAEQKRUWIdmMAZV58DQ7CS"
+      }
+    ]
+  },
+  {
+    "id": "G20-P08",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Mobile optimization",
+    "prompt": "Optimize this for mobile without affecting the desktop view. Move the video below the text, reduce font size, etc.",
+    "pdf_name": "How to Build Websites with Claude Design.pdf",
+    "pdf_link": "https://drive.google.com/file/d/12YO_j6gKWmYG0nYaTDZIvYL_pZL25tX5/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 22,
+        "publish_date": "2026-04-21",
+        "video_title": "Claude Design Builds Beautiful 3D Websites Instantly (full course)",
+        "resources_link": "https://drive.google.com/drive/folders/1IokjDhZPaLlAEQKRUWIdmMAZV58DQ7CS"
+      }
+    ]
+  },
+  {
+    "id": "G20-P09",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Use negatives and real references in design prompts",
+    "prompt": "no Inter, no Roboto, no YC gradients, no weird punctuation\nLinear 2023 with higher density",
+    "pdf_name": "How to Build Websites with Claude Design.pdf",
+    "pdf_link": "https://drive.google.com/file/d/12YO_j6gKWmYG0nYaTDZIvYL_pZL25tX5/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 22,
+        "publish_date": "2026-04-21",
+        "video_title": "Claude Design Builds Beautiful 3D Websites Instantly (full course)",
+        "resources_link": "https://drive.google.com/drive/folders/1IokjDhZPaLlAEQKRUWIdmMAZV58DQ7CS"
+      }
+    ]
+  },
+  {
+    "id": "G21-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Compact with keep-instructions",
+    "prompt": "/compact but keep all API integration decisions and database schema",
+    "pdf_name": "32 Claude Code Hacks - From Beginner to Power User.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1p2PZWSdj24h3MABg5-8QoDQZKsZ_qbtQ/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 27,
+        "publish_date": "2026-04-27",
+        "video_title": "32 Claude Code Hacks in 16 Mins",
+        "resources_link": "https://drive.google.com/drive/folders/1KYQGVMSgJeBtiGMw4cdBAIDmZgT5mcgi"
+      }
+    ]
+  },
+  {
+    "id": "G21-P02",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Give Claude problems, not commands",
+    "prompt": "How should we handle growth tracking?",
+    "pdf_name": "32 Claude Code Hacks - From Beginner to Power User.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1p2PZWSdj24h3MABg5-8QoDQZKsZ_qbtQ/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 27,
+        "publish_date": "2026-04-27",
+        "video_title": "32 Claude Code Hacks in 16 Mins",
+        "resources_link": "https://drive.google.com/drive/folders/1KYQGVMSgJeBtiGMw4cdBAIDmZgT5mcgi"
+      }
+    ]
+  },
+  {
+    "id": "G21-P03",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Make Claude ask questions until aligned",
+    "prompt": "Continuously ask me questions until you are 95% confident that you understand exactly what I need and what you need to do.",
+    "pdf_name": "32 Claude Code Hacks - From Beginner to Power User.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1p2PZWSdj24h3MABg5-8QoDQZKsZ_qbtQ/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 27,
+        "publish_date": "2026-04-27",
+        "video_title": "32 Claude Code Hacks in 16 Mins",
+        "resources_link": "https://drive.google.com/drive/folders/1KYQGVMSgJeBtiGMw4cdBAIDmZgT5mcgi"
+      }
+    ]
+  },
+  {
+    "id": "G21-P04",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Self-checking to-do list (example sequence)",
+    "prompt": "1) Build the website, 2) Take a screenshot and check that everything looks right, 3) Open Chrome DevTools and confirm there are no functionality errors.",
+    "pdf_name": "32 Claude Code Hacks - From Beginner to Power User.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1p2PZWSdj24h3MABg5-8QoDQZKsZ_qbtQ/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 27,
+        "publish_date": "2026-04-27",
+        "video_title": "32 Claude Code Hacks in 16 Mins",
+        "resources_link": "https://drive.google.com/drive/folders/1KYQGVMSgJeBtiGMw4cdBAIDmZgT5mcgi"
+      }
+    ]
+  },
+  {
+    "id": "G21-P05",
+    "type": "system",
+    "verbatim": true,
+    "label": "To-do quality rule",
+    "prompt": "Do not move on to the next to-do until you are 95% confident that the current one is good.",
+    "pdf_name": "32 Claude Code Hacks - From Beginner to Power User.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1p2PZWSdj24h3MABg5-8QoDQZKsZ_qbtQ/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 27,
+        "publish_date": "2026-04-27",
+        "video_title": "32 Claude Code Hacks in 16 Mins",
+        "resources_link": "https://drive.google.com/drive/folders/1KYQGVMSgJeBtiGMw4cdBAIDmZgT5mcgi"
+      }
+    ]
+  },
+  {
+    "id": "G21-P06",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Challenge a mediocre output",
+    "prompt": "scrap that, do a more elegant version\nthis is not good enough, try again with a completely different approach",
+    "pdf_name": "32 Claude Code Hacks - From Beginner to Power User.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1p2PZWSdj24h3MABg5-8QoDQZKsZ_qbtQ/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 27,
+        "publish_date": "2026-04-27",
+        "video_title": "32 Claude Code Hacks in 16 Mins",
+        "resources_link": "https://drive.google.com/drive/folders/1KYQGVMSgJeBtiGMw4cdBAIDmZgT5mcgi"
+      }
+    ]
+  },
+  {
+    "id": "G21-P07",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Screenshot self-check",
+    "prompt": "Take a screenshot of the website and tell me if the layout looks right.",
+    "pdf_name": "32 Claude Code Hacks - From Beginner to Power User.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1p2PZWSdj24h3MABg5-8QoDQZKsZ_qbtQ/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 27,
+        "publish_date": "2026-04-27",
+        "video_title": "32 Claude Code Hacks in 16 Mins",
+        "resources_link": "https://drive.google.com/drive/folders/1KYQGVMSgJeBtiGMw4cdBAIDmZgT5mcgi"
+      }
+    ]
+  },
+  {
+    "id": "G21-P08",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Clone an inspiration site (with screenshots attached)",
+    "prompt": "make it look like this",
+    "pdf_name": "32 Claude Code Hacks - From Beginner to Power User.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1p2PZWSdj24h3MABg5-8QoDQZKsZ_qbtQ/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 27,
+        "publish_date": "2026-04-27",
+        "video_title": "32 Claude Code Hacks in 16 Mins",
+        "resources_link": "https://drive.google.com/drive/folders/1KYQGVMSgJeBtiGMw4cdBAIDmZgT5mcgi"
+      }
+    ]
+  },
+  {
+    "id": "G21-P09",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "/loop recurring task and one-time reminder",
+    "prompt": "every 5 minutes, check in on the deployment\nremind me at 3 p.m. to check in with the team on X",
+    "pdf_name": "32 Claude Code Hacks - From Beginner to Power User.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1p2PZWSdj24h3MABg5-8QoDQZKsZ_qbtQ/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 27,
+        "publish_date": "2026-04-27",
+        "video_title": "32 Claude Code Hacks in 16 Mins",
+        "resources_link": "https://drive.google.com/drive/folders/1KYQGVMSgJeBtiGMw4cdBAIDmZgT5mcgi"
+      }
+    ]
+  },
+  {
+    "id": "G21-P10",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Plain-English analytics via a CLI (e.g., BigQuery bq)",
+    "prompt": "What were our top 10 revenue sources last quarter?",
+    "pdf_name": "32 Claude Code Hacks - From Beginner to Power User.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1p2PZWSdj24h3MABg5-8QoDQZKsZ_qbtQ/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 27,
+        "publish_date": "2026-04-27",
+        "video_title": "32 Claude Code Hacks in 16 Mins",
+        "resources_link": "https://drive.google.com/drive/folders/1KYQGVMSgJeBtiGMw4cdBAIDmZgT5mcgi"
+      }
+    ]
+  },
+  {
+    "id": "G22-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Design system feedback: protect your logo",
+    "prompt": "the logo should not be modified from the PNG I uploaded",
+    "pdf_name": "Claude Design Masterclass Resource Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1xh9-UfR6Jg5qelCvEMXTvInVqNzyd_ad/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 28,
+        "publish_date": "2026-04-30",
+        "video_title": "Claude Design Masterclass: Websites, Videos & More (2 Hours)",
+        "resources_link": "https://drive.google.com/drive/folders/14-Evyvr8MvOBQD-hfM3aGxBDfYLOYsQU"
+      }
+    ]
+  },
+  {
+    "id": "G22-P02",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Ask for a Tweaks panel",
+    "prompt": "give me a bunch of tweaks I can play around with",
+    "pdf_name": "Claude Design Masterclass Resource Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1xh9-UfR6Jg5qelCvEMXTvInVqNzyd_ad/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 28,
+        "publish_date": "2026-04-30",
+        "video_title": "Claude Design Masterclass: Websites, Videos & More (2 Hours)",
+        "resources_link": "https://drive.google.com/drive/folders/14-Evyvr8MvOBQD-hfM3aGxBDfYLOYsQU"
+      }
+    ]
+  },
+  {
+    "id": "G22-P03",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Mobile app spec request (Claude Chat)",
+    "prompt": "full spec for a mobile app, requirement doc, text-based, that I can turn into a high-fidelity breakdown",
+    "pdf_name": "Claude Design Masterclass Resource Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1xh9-UfR6Jg5qelCvEMXTvInVqNzyd_ad/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 28,
+        "publish_date": "2026-04-30",
+        "video_title": "Claude Design Masterclass: Websites, Videos & More (2 Hours)",
+        "resources_link": "https://drive.google.com/drive/folders/14-Evyvr8MvOBQD-hfM3aGxBDfYLOYsQU"
+      }
+    ]
+  },
+  {
+    "id": "G22-P04",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Launch video creative direction",
+    "prompt": "more dynamic, tell a story, more motion graphics, keep audience attention",
+    "pdf_name": "Claude Design Masterclass Resource Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1xh9-UfR6Jg5qelCvEMXTvInVqNzyd_ad/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 28,
+        "publish_date": "2026-04-30",
+        "video_title": "Claude Design Masterclass: Websites, Videos & More (2 Hours)",
+        "resources_link": "https://drive.google.com/drive/folders/14-Evyvr8MvOBQD-hfM3aGxBDfYLOYsQU"
+      }
+    ]
+  },
+  {
+    "id": "G22-P05",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Verify the export locally",
+    "prompt": "open this on a local host so I can view it",
+    "pdf_name": "Claude Design Masterclass Resource Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1xh9-UfR6Jg5qelCvEMXTvInVqNzyd_ad/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 28,
+        "publish_date": "2026-04-30",
+        "video_title": "Claude Design Masterclass: Websites, Videos & More (2 Hours)",
+        "resources_link": "https://drive.google.com/drive/folders/14-Evyvr8MvOBQD-hfM3aGxBDfYLOYsQU"
+      }
+    ]
+  },
+  {
+    "id": "G22-P06",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Negatives to include in design prompts",
+    "prompt": "no en dashes, no this font, no this color scheme",
+    "pdf_name": "Claude Design Masterclass Resource Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1xh9-UfR6Jg5qelCvEMXTvInVqNzyd_ad/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 28,
+        "publish_date": "2026-04-30",
+        "video_title": "Claude Design Masterclass: Websites, Videos & More (2 Hours)",
+        "resources_link": "https://drive.google.com/drive/folders/14-Evyvr8MvOBQD-hfM3aGxBDfYLOYsQU"
+      }
+    ]
+  },
+  {
+    "id": "G23-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Turn a workflow into a reusable skill (Codex)",
+    "prompt": "Turn that into a skill so every time I ask for [X], you do this exact flow.",
+    "pdf_name": "Master 97% of Codex in One Hour.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1ZoiGbU-tE4HOfhueUb_j6XTFjqZlhRyl/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 33,
+        "publish_date": "2026-05-06",
+        "video_title": "Master 97% of Codex in 1 Hour (full course)",
+        "resources_link": "https://drive.google.com/drive/folders/1g64yKt4QF6TT4XJkyUgIqnDMOS-shuiJ"
+      }
+    ]
+  },
+  {
+    "id": "G23-P02",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Change a skill's scope (Codex)",
+    "prompt": "Move this skill to global\nKeep this skill local to this project",
+    "pdf_name": "Master 97% of Codex in One Hour.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1ZoiGbU-tE4HOfhueUb_j6XTFjqZlhRyl/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 33,
+        "publish_date": "2026-05-06",
+        "video_title": "Master 97% of Codex in 1 Hour (full course)",
+        "resources_link": "https://drive.google.com/drive/folders/1g64yKt4QF6TT4XJkyUgIqnDMOS-shuiJ"
+      }
+    ]
+  },
+  {
+    "id": "G23-P03",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Invoke a skill in natural language (Codex)",
+    "prompt": "grab my YouTube comments and give me insights",
+    "pdf_name": "Master 97% of Codex in One Hour.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1ZoiGbU-tE4HOfhueUb_j6XTFjqZlhRyl/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 33,
+        "publish_date": "2026-05-06",
+        "video_title": "Master 97% of Codex in 1 Hour (full course)",
+        "resources_link": "https://drive.google.com/drive/folders/1g64yKt4QF6TT4XJkyUgIqnDMOS-shuiJ"
+      }
+    ]
+  },
+  {
+    "id": "G23-P04",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Scheduled automation (Codex)",
+    "prompt": "Every Sunday at 5:00 PM, run the YouTube comment insights skill, refresh the data, and push the update to GitHub",
+    "pdf_name": "Master 97% of Codex in One Hour.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1ZoiGbU-tE4HOfhueUb_j6XTFjqZlhRyl/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 33,
+        "publish_date": "2026-05-06",
+        "video_title": "Master 97% of Codex in 1 Hour (full course)",
+        "resources_link": "https://drive.google.com/drive/folders/1g64yKt4QF6TT4XJkyUgIqnDMOS-shuiJ"
+      }
+    ]
+  },
+  {
+    "id": "G23-P05",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Migrate a Claude Code project to Codex",
+    "prompt": "Help me figure out what files to create to make this compatible with Codex.",
+    "pdf_name": "Master 97% of Codex in One Hour.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1ZoiGbU-tE4HOfhueUb_j6XTFjqZlhRyl/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 33,
+        "publish_date": "2026-05-06",
+        "video_title": "Master 97% of Codex in 1 Hour (full course)",
+        "resources_link": "https://drive.google.com/drive/folders/1g64yKt4QF6TT4XJkyUgIqnDMOS-shuiJ"
+      }
+    ]
+  },
+  {
+    "id": "G24-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Ask a Claude Project about a past decision",
+    "prompt": "What was the thing we decided about the Q2 launch last week?",
+    "pdf_name": "Every Level of Claude Explained.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1roxnL8945jtDcTuxqGPVRoC75yqP_Wtg/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 37,
+        "publish_date": "2026-05-12",
+        "video_title": "Every Level of Claude Explained in 21 Minutes",
+        "resources_link": "https://drive.google.com/drive/folders/1aLs-mLYpivfGm7J8vAwwgmgUjf5dOKvU"
+      }
+    ]
+  },
+  {
+    "id": "G24-P02",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Clean up a downloads folder (Cowork)",
+    "prompt": "sort everything by type, rename consistently, write me a summary",
+    "pdf_name": "Every Level of Claude Explained.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1roxnL8945jtDcTuxqGPVRoC75yqP_Wtg/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 37,
+        "publish_date": "2026-05-12",
+        "video_title": "Every Level of Claude Explained in 21 Minutes",
+        "resources_link": "https://drive.google.com/drive/folders/1aLs-mLYpivfGm7J8vAwwgmgUjf5dOKvU"
+      }
+    ]
+  },
+  {
+    "id": "G24-P03",
+    "type": "system",
+    "verbatim": true,
+    "label": "Cowork folder rules",
+    "prompt": "Read about-me first. Never edit my templates. Always deliver to the outputs folder.",
+    "pdf_name": "Every Level of Claude Explained.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1roxnL8945jtDcTuxqGPVRoC75yqP_Wtg/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 37,
+        "publish_date": "2026-05-12",
+        "video_title": "Every Level of Claude Explained in 21 Minutes",
+        "resources_link": "https://drive.google.com/drive/folders/1aLs-mLYpivfGm7J8vAwwgmgUjf5dOKvU"
+      }
+    ]
+  },
+  {
+    "id": "G24-P04",
+    "type": "system",
+    "verbatim": true,
+    "label": "CLAUDE.md negative instructions (examples)",
+    "prompt": "never do X\nnever write with em dashes",
+    "pdf_name": "Every Level of Claude Explained.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1roxnL8945jtDcTuxqGPVRoC75yqP_Wtg/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 37,
+        "publish_date": "2026-05-12",
+        "video_title": "Every Level of Claude Explained in 21 Minutes",
+        "resources_link": "https://drive.google.com/drive/folders/1aLs-mLYpivfGm7J8vAwwgmgUjf5dOKvU"
+      }
+    ]
+  },
+  {
+    "id": "G25-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Set up a /loop reminder",
+    "prompt": "Set up a loop every 10 minutes to remind me to take out the trash.",
+    "pdf_name": "Three Ways to Deploy Your Claude Code Agents.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1BQ0ySX4yfCd4TZPrzwiTuJKEyik2PxRX/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 38,
+        "publish_date": "2026-05-15",
+        "video_title": "I Tested 3 Ways to Deploy Claude Agents (Here's When to Use Each)",
+        "resources_link": "https://drive.google.com/drive/folders/1ZnE-Pkg6W3rJKxPblEcrgFEXU3qXVkJk"
+      }
+    ]
+  },
+  {
+    "id": "G25-P02",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Self-terminating loop",
+    "prompt": "Run this every 10 minutes, then kill the loop after 24 hours.",
+    "pdf_name": "Three Ways to Deploy Your Claude Code Agents.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1BQ0ySX4yfCd4TZPrzwiTuJKEyik2PxRX/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 38,
+        "publish_date": "2026-05-15",
+        "video_title": "I Tested 3 Ways to Deploy Claude Agents (Here's When to Use Each)",
+        "resources_link": "https://drive.google.com/drive/folders/1ZnE-Pkg6W3rJKxPblEcrgFEXU3qXVkJk"
+      }
+    ]
+  },
+  {
+    "id": "G26-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Switch a project from Claude Code to Codex",
+    "prompt": "I built this in Claude Code, you are Codex now. Walk through it, understand it, update what needs to change.",
+    "pdf_name": "Codex vs Claude Code - Which Coding Agent Should You Actually Use.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1yJmwdfxWekUjWCHHIwIcRB3JM6JG5xdP/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 43,
+        "publish_date": "2026-05-26",
+        "video_title": "100 Hours Testing Claude Code vs ChatGPT Codex (honest results)",
+        "resources_link": "https://drive.google.com/drive/folders/1UtKVjCvnj0PE56TEc1vZcqgdeOSrbuZx"
+      }
+    ]
+  },
+  {
+    "id": "G27-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Start from the work you already do",
+    "prompt": "Every day I do X, Y, and Z. How could AI help me here?",
+    "pdf_name": "From Laid Off to Head of AI in 1 Year.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1uF_Td45_IpcfioKqF4F6ZuYEeGvNmdb-/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 51,
+        "publish_date": "2026-06-12",
+        "video_title": "From Zero to Head of AI in 1 Year (as a regular person)",
+        "resources_link": "https://drive.google.com/drive/folders/1uLBeNVEAPZTIxSh44UMmky0_5ZA6UxDL"
+      }
+    ]
+  },
+  {
+    "id": "G28-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Feed your edits back so the AI learns your taste",
+    "prompt": "Here are the five things I changed and why.",
+    "pdf_name": "6 AI Skills to Future-Proof Your Career.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1a_txv73VQlci-Km1KWykKClr9BC_22q1/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 52,
+        "publish_date": "2026-06-15",
+        "video_title": "Learn These 6 AI Skills Now (Before AI Replaces You)",
+        "resources_link": "https://drive.google.com/drive/folders/1KgbkIOCyDWnhtkW2AChsC8kQvsEvcZk0"
+      }
+    ]
+  },
+  {
+    "id": "G28-P02",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Deterministic workflow vs. AI task (examples)",
+    "prompt": "Every morning at 9 a.m., pull last week's revenue from Stripe and post it in Slack.\nRead these incoming customer emails, understand what they actually want, and draft a tailored response.",
+    "pdf_name": "6 AI Skills to Future-Proof Your Career.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1a_txv73VQlci-Km1KWykKClr9BC_22q1/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 52,
+        "publish_date": "2026-06-15",
+        "video_title": "Learn These 6 AI Skills Now (Before AI Replaces You)",
+        "resources_link": "https://drive.google.com/drive/folders/1KgbkIOCyDWnhtkW2AChsC8kQvsEvcZk0"
+      }
+    ]
+  },
+  {
+    "id": "G29-P01",
+    "type": "template",
+    "verbatim": false,
+    "label": "Single-file build spec (plan with context)",
+    "prompt": "Write one Markdown plan per build that answers:\n- The goal: What are we building here?\n- What success looks like: What does \"done\" actually mean?\n- The validation strategy: How will the agent know the work is done and working well?\n- The integration points: Which parts of the codebase do we need to touch, and which files will we create or edit?",
+    "pdf_name": "How to Build Effective Claude Code Agents in 2026.pdf",
+    "pdf_link": "https://drive.google.com/file/d/16VuVpBUlmAoBZe9UAp4WlZbqylPa6jPj/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 54,
+        "publish_date": "2026-06-18",
+        "video_title": "1000+ Hours in Claude Code in 60 Mins",
+        "resources_link": "https://drive.google.com/drive/folders/1hhJ3_qkqj47gxaXrERcJfsEIlo5qUmXf"
+      }
+    ]
+  },
+  {
+    "id": "G29-P02",
+    "type": "prompt",
+    "verbatim": false,
+    "label": "Homework: explain an agent harness",
+    "prompt": "Explain an agent harness.",
+    "pdf_name": "How to Build Effective Claude Code Agents in 2026.pdf",
+    "pdf_link": "https://drive.google.com/file/d/16VuVpBUlmAoBZe9UAp4WlZbqylPa6jPj/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 54,
+        "publish_date": "2026-06-18",
+        "video_title": "1000+ Hours in Claude Code in 60 Mins",
+        "resources_link": "https://drive.google.com/drive/folders/1hhJ3_qkqj47gxaXrERcJfsEIlo5qUmXf"
+      }
+    ]
+  },
+  {
+    "id": "G29-P03",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Ask the model to verify, not to judge",
+    "prompt": "Does this automation handle this input?",
+    "pdf_name": "How to Build Effective Claude Code Agents in 2026.pdf",
+    "pdf_link": "https://drive.google.com/file/d/16VuVpBUlmAoBZe9UAp4WlZbqylPa6jPj/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 54,
+        "publish_date": "2026-06-18",
+        "video_title": "1000+ Hours in Claude Code in 60 Mins",
+        "resources_link": "https://drive.google.com/drive/folders/1hhJ3_qkqj47gxaXrERcJfsEIlo5qUmXf"
+      }
+    ]
+  },
+  {
+    "id": "G29-P04",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Edge-case check after implementation",
+    "prompt": "How could this go wrong?",
+    "pdf_name": "How to Build Effective Claude Code Agents in 2026.pdf",
+    "pdf_link": "https://drive.google.com/file/d/16VuVpBUlmAoBZe9UAp4WlZbqylPa6jPj/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 54,
+        "publish_date": "2026-06-18",
+        "video_title": "1000+ Hours in Claude Code in 60 Mins",
+        "resources_link": "https://drive.google.com/drive/folders/1hhJ3_qkqj47gxaXrERcJfsEIlo5qUmXf"
+      }
+    ]
+  },
+  {
+    "id": "G29-P05",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "System evolution after every issue",
+    "prompt": "What rule, document, or skill update would prevent this next time?",
+    "pdf_name": "How to Build Effective Claude Code Agents in 2026.pdf",
+    "pdf_link": "https://drive.google.com/file/d/16VuVpBUlmAoBZe9UAp4WlZbqylPa6jPj/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 54,
+        "publish_date": "2026-06-18",
+        "video_title": "1000+ Hours in Claude Code in 60 Mins",
+        "resources_link": "https://drive.google.com/drive/folders/1hhJ3_qkqj47gxaXrERcJfsEIlo5qUmXf"
+      }
+    ]
+  },
+  {
+    "id": "G29-P06",
+    "type": "prompt",
+    "verbatim": false,
+    "label": "Debate panel / war room (agent team personas)",
+    "prompt": "One of you is a CEO, one is a beginner, one is a college student. Each of you do independent research, form your own opinion, then debate. Keep debating until you reach consensus.",
+    "pdf_name": "How to Build Effective Claude Code Agents in 2026.pdf",
+    "pdf_link": "https://drive.google.com/file/d/16VuVpBUlmAoBZe9UAp4WlZbqylPa6jPj/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 54,
+        "publish_date": "2026-06-18",
+        "video_title": "1000+ Hours in Claude Code in 60 Mins",
+        "resources_link": "https://drive.google.com/drive/folders/1hhJ3_qkqj47gxaXrERcJfsEIlo5qUmXf"
+      }
+    ]
+  },
+  {
+    "id": "G29-P07",
+    "type": "prompt",
+    "verbatim": false,
+    "label": "Adversarial review of a finished build",
+    "prompt": "Play devil's advocate and be mean to the first session's work. Surface real problems instead of being happy-go-lucky.",
+    "pdf_name": "How to Build Effective Claude Code Agents in 2026.pdf",
+    "pdf_link": "https://drive.google.com/file/d/16VuVpBUlmAoBZe9UAp4WlZbqylPa6jPj/view",
+    "videos": [
+      {
+        "quarter": "Q2 2026",
+        "sheet_row": 54,
+        "publish_date": "2026-06-18",
+        "video_title": "1000+ Hours in Claude Code in 60 Mins",
+        "resources_link": "https://drive.google.com/drive/folders/1hhJ3_qkqj47gxaXrERcJfsEIlo5qUmXf"
+      }
+    ]
+  },
+  {
+    "id": "G30-P01",
+    "type": "template",
+    "verbatim": false,
+    "label": "Describe your first task, then make Claude push back",
+    "prompt": "Describe the task as clearly as you can:\n- What it is\n- How you do it today\n- What a win looks like\nBefore building anything, have Claude push back on the idea (e.g., run \"The Roast\": a council of sub-agents that returns one verdict: Go, Reshape, or Kill, with every point backed by something real).",
+    "pdf_name": "How Claude is Creating a New Generation of Millionaires - Resource Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1B4OTJQ4-C1XwpkShm5oJA7JYkDjpdgrG/view",
+    "videos": [
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 3,
+        "publish_date": "2026-07-03",
+        "video_title": "How Claude is Creating a New Generation of Millionaires",
+        "resources_link": "https://drive.google.com/drive/folders/1ycdgbVzDV-ujFe7nbvD_qfQj7M7P5zPv"
+      }
+    ]
+  },
+  {
+    "id": "G31-P01",
+    "type": "system",
+    "verbatim": true,
+    "label": "Negative prompting guardrails (examples)",
+    "prompt": "Do not add unrequested features.\nDo not create error handling for impossible scenarios.",
+    "pdf_name": "12 Lessons from 5,000 Hours Building with AI - Resource Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1cQp_Ib8KWhAccPWwH-Cq6MDthHMb0pKO/view",
+    "videos": [
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 13,
+        "publish_date": "2026-08-04",
+        "video_title": "5000 Hours of Building AI in Just 17 Minutes",
+        "resources_link": "https://drive.google.com/drive/folders/11gZKduGJ-Koa-RpyS7zbjiYxtw8gt1Zi"
+      }
+    ]
+  },
+  {
+    "id": "G31-P02",
+    "type": "prompt",
+    "verbatim": false,
+    "label": "Challenge the plan from several perspectives",
+    "prompt": "Challenge this plan from three perspectives:\n- A skeptical customer who must trust or buy the result.\n- A competitor looking for weaknesses or differentiation.\n- An engineer responsible for long term maintenance.",
+    "pdf_name": "12 Lessons from 5,000 Hours Building with AI - Resource Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1cQp_Ib8KWhAccPWwH-Cq6MDthHMb0pKO/view",
+    "videos": [
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 13,
+        "publish_date": "2026-08-04",
+        "video_title": "5000 Hours of Building AI in Just 17 Minutes",
+        "resources_link": "https://drive.google.com/drive/folders/11gZKduGJ-Koa-RpyS7zbjiYxtw8gt1Zi"
+      }
+    ]
+  },
+  {
+    "id": "G31-P03",
+    "type": "prompt",
+    "verbatim": false,
+    "label": "Website verification loop (have the AI prove it's done)",
+    "prompt": "1. Capture screenshots and check that every element stays in bounds.\n2. Inspect the mobile layout and visual quality.\n3. Click every important button and complete the signup flow.\n4. Confirm that forms are formatted correctly and reach the correct webhook.\nProve that the work is complete before you report completion.",
+    "pdf_name": "12 Lessons from 5,000 Hours Building with AI - Resource Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1cQp_Ib8KWhAccPWwH-Cq6MDthHMb0pKO/view",
+    "videos": [
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 13,
+        "publish_date": "2026-08-04",
+        "video_title": "5000 Hours of Building AI in Just 17 Minutes",
+        "resources_link": "https://drive.google.com/drive/folders/11gZKduGJ-Koa-RpyS7zbjiYxtw8gt1Zi"
+      }
+    ]
+  },
+  {
+    "id": "G31-P04",
+    "type": "system",
+    "verbatim": true,
+    "label": "Permission rule (example)",
+    "prompt": "only draft emails",
+    "pdf_name": "12 Lessons from 5,000 Hours Building with AI - Resource Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1cQp_Ib8KWhAccPWwH-Cq6MDthHMb0pKO/view",
+    "videos": [
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 13,
+        "publish_date": "2026-08-04",
+        "video_title": "5000 Hours of Building AI in Just 17 Minutes",
+        "resources_link": "https://drive.google.com/drive/folders/11gZKduGJ-Koa-RpyS7zbjiYxtw8gt1Zi"
+      }
+    ]
+  },
+  {
+    "id": "G32-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Outreach prompt: warm first-touch message",
+    "prompt": "Act as a B2B outreach copywriter. Write a casual, friendly first touch message for a warm contact. I am a one person AI consultant and I built [specific system]. My goal is not to pitch. It is to get a 20 minute call to learn about their business and show them what I built. Keep it under 100 words. Avoid corporate language. Write it like a real person who built something useful.",
+    "pdf_name": "How to Build a One Person AI Business in 2026.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1pfF0uMUJAahHcgxAbA_LNHHZDSbYr5Nq/view",
+    "videos": [
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 15,
+        "publish_date": "2026-08-11",
+        "video_title": "How to Build a One Person AI Business (Using Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/1gxVvXL8ZiSlg0x74hx0JaOhvBy7iVXHE"
+      }
+    ]
+  },
+  {
+    "id": "G32-P02",
+    "type": "template",
+    "verbatim": true,
+    "label": "Four Blank Test (scoping formula)",
+    "prompt": "This automation is in the [outcome bucket]. The specific KPI is [metric]. The baseline today is [number]. After 60 days, we expect [target].",
+    "pdf_name": "How to Build a One Person AI Business in 2026.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1pfF0uMUJAahHcgxAbA_LNHHZDSbYr5Nq/view",
+    "videos": [
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 15,
+        "publish_date": "2026-08-11",
+        "video_title": "How to Build a One Person AI Business (Using Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/1gxVvXL8ZiSlg0x74hx0JaOhvBy7iVXHE"
+      }
+    ]
+  },
+  {
+    "id": "G32-P03",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Smallest Valuable Product prompt",
+    "prompt": "I am targeting [specific niche], and they struggle with [specific problem]. Help me scope the smallest valuable product I can ship in two weeks as a solo founder. Give me the core feature that solves 80% of the pain, the features I should explicitly exclude from V1, the technology stack you recommend for a nontechnical founder using Claude Code, and the potential competitors plus my differentiation.",
+    "pdf_name": "How to Build a One Person AI Business in 2026.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1pfF0uMUJAahHcgxAbA_LNHHZDSbYr5Nq/view",
+    "videos": [
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 15,
+        "publish_date": "2026-08-11",
+        "video_title": "How to Build a One Person AI Business (Using Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/1gxVvXL8ZiSlg0x74hx0JaOhvBy7iVXHE"
+      }
+    ]
+  },
+  {
+    "id": "G32-P04",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Pricing prompt: three tiers with psychological anchoring",
+    "prompt": "I am a one person AI consultant offering [service] to [customer type]. They currently solve this through [manual alternative]. Build three pricing tiers using psychological anchoring. Map the tiers to education and setup, an audit or single project, and a monthly retainer. For each tier, provide the deliverable, price range, and most important value message.",
+    "pdf_name": "How to Build a One Person AI Business in 2026.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1pfF0uMUJAahHcgxAbA_LNHHZDSbYr5Nq/view",
+    "videos": [
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 15,
+        "publish_date": "2026-08-11",
+        "video_title": "How to Build a One Person AI Business (Using Claude Code)",
+        "resources_link": "https://drive.google.com/drive/folders/1gxVvXL8ZiSlg0x74hx0JaOhvBy7iVXHE"
+      }
+    ]
+  },
+  {
+    "id": "G33-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Rule 1 better prompt: give the outcome, not every task",
+    "prompt": "Create an appealing landing page that offers voice agent solutions to our target audience. Use current research and our business context to decide what the page needs. The result should be complete, accurate, persuasive, and ready to publish.",
+    "pdf_name": "Claude Fable 5.1 Prompting Resource Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1vjnp5UbMVRTDkHeY6lqIEHrGiEJPQRGc/view",
+    "videos": [
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 24,
+        "publish_date": "2026-09-02",
+        "video_title": "I Analyzed How Anthropic ACTUALLY Prompts Fable 5.1",
+        "resources_link": "https://drive.google.com/drive/folders/1_gYxkgOjTnM4qVSla3t-yVpDc-35i6Pq"
+      }
+    ]
+  },
+  {
+    "id": "G33-P02",
+    "type": "template",
+    "verbatim": true,
+    "label": "Rule 1 template: define done, then tell it to finish",
+    "prompt": "Goal: Here is the outcome I need and why it matters: [goal and context].\nSuccess: The work is complete when: [definition of done].\nCompletion: Complete this end to end. Make routine reversible decisions yourself. Do not stop with a plan or ask permission for steps already included in the request.",
+    "pdf_name": "Claude Fable 5.1 Prompting Resource Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1vjnp5UbMVRTDkHeY6lqIEHrGiEJPQRGc/view",
+    "videos": [
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 24,
+        "publish_date": "2026-09-02",
+        "video_title": "I Analyzed How Anthropic ACTUALLY Prompts Fable 5.1",
+        "resources_link": "https://drive.google.com/drive/folders/1_gYxkgOjTnM4qVSla3t-yVpDc-35i6Pq"
+      }
+    ]
+  },
+  {
+    "id": "G33-P03",
+    "type": "template",
+    "verbatim": true,
+    "label": "Rule 3 template: require verification, not confidence",
+    "prompt": "Verification: Before calling this complete, test the result using the same checks a capable human reviewer would use. Show what passed, what failed, what you fixed, and anything that remains unverified.",
+    "pdf_name": "Claude Fable 5.1 Prompting Resource Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1vjnp5UbMVRTDkHeY6lqIEHrGiEJPQRGc/view",
+    "videos": [
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 24,
+        "publish_date": "2026-09-02",
+        "video_title": "I Analyzed How Anthropic ACTUALLY Prompts Fable 5.1",
+        "resources_link": "https://drive.google.com/drive/folders/1_gYxkgOjTnM4qVSla3t-yVpDc-35i6Pq"
+      }
+    ]
+  },
+  {
+    "id": "G33-P04",
+    "type": "template",
+    "verbatim": true,
+    "label": "Rule 4 template: parallelize and delegate",
+    "prompt": "Execution: Identify which parts of this task are independent. Run independent tool calls at the same time. Delegate substantial independent workstreams when useful, continue productive work while they run, and keep dependent operations sequential.",
+    "pdf_name": "Claude Fable 5.1 Prompting Resource Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1vjnp5UbMVRTDkHeY6lqIEHrGiEJPQRGc/view",
+    "videos": [
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 24,
+        "publish_date": "2026-09-02",
+        "video_title": "I Analyzed How Anthropic ACTUALLY Prompts Fable 5.1",
+        "resources_link": "https://drive.google.com/drive/folders/1_gYxkgOjTnM4qVSla3t-yVpDc-35i6Pq"
+      }
+    ]
+  },
+  {
+    "id": "G33-P05",
+    "type": "template",
+    "verbatim": true,
+    "label": "Master prompt: all four rules together",
+    "prompt": "Goal: Here is what I need to accomplish and why it matters: [goal and context].\nDefinition of Done: The work is complete when: [observable success criteria].\nCompletion: Complete the task end to end. Make routine reversible decisions yourself. Stop only for a destructive action, a material scope change, or information only I can provide.\nEffort: Use the lowest effort level that reliably produces the required quality. Increase effort for difficult reasoning and reduce it for routine execution.\nVerification: Check every material result before calling the task complete. Correct failures and clearly disclose anything unverified.\nExecution: Run independent operations at the same time. Delegate substantial independent workstreams and continue useful work while they run.",
+    "pdf_name": "Claude Fable 5.1 Prompting Resource Guide.pdf",
+    "pdf_link": "https://drive.google.com/file/d/1vjnp5UbMVRTDkHeY6lqIEHrGiEJPQRGc/view",
+    "videos": [
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 24,
+        "publish_date": "2026-09-02",
+        "video_title": "I Analyzed How Anthropic ACTUALLY Prompts Fable 5.1",
+        "resources_link": "https://drive.google.com/drive/folders/1_gYxkgOjTnM4qVSla3t-yVpDc-35i6Pq"
+      }
+    ]
+  },
+  {
+    "id": "G34-P01",
+    "type": "prompt",
+    "verbatim": true,
+    "label": "Starter prompt: 7-day trading research & monitoring project (Codex)",
+    "prompt": "Use GPT 6 Astra to help me build a seven market day trading research and monitoring project. First ask for my dates, budget, allowed instruments, and loss limits. Research official calendars and company announcements, and save a cited Markdown strategy. Create project instructions, readiness tracking, a project local Alpaca .env template, read only account/data checks, and a durable progress journal. Keep real credentials out of chat and shared files. Configure the check times in this guide through one automation returning to this conversation, adjusted for my session dates and timezone. Connect my chosen ClickUp channel and send midday and after close reports, including no trade days. Test account reads, handoff recovery, schedule dates, and notification delivery. Leave live orders disabled until execution controls and paper trading tests have passed and I explicitly authorize execution.",
+    "pdf_name": "AI Trading with Codex and GPT 6 Astra.pdf",
+    "pdf_link": "https://drive.google.com/file/d/13cBUT-Sj_rIhZ5ldVqR90fpvLkeAWGo0/view",
+    "videos": [
+      {
+        "quarter": "Q3 2026",
+        "sheet_row": 27,
+        "publish_date": "2026-09-07",
+        "video_title": "I Turned GPT-6 Astra Into a 24/7 Stock Trader (tutorial)",
+        "resources_link": "https://drive.google.com/drive/folders/1lql84MLtb1_heuUSQ6kwV4ykRsY_yb6G"
+      }
+    ]
+  }
+]
