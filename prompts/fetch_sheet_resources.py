@@ -1,14 +1,16 @@
 """
-Fetch Sheet PDFs
-Downloads every PDF linked from the "Resources" column of the video resources
-Google Sheet (all quarter tabs), removes duplicates, and extracts their text so
-the prompts can be reviewed.
+Fetch Sheet Resources
+Downloads the resources linked from the "Resources" column of the video
+resources Google Sheet (all quarter tabs) so the prompts can be reviewed:
+- PDF guides, with their text extracted
+- prompt-style text files (.md, .txt, extensionless files and Google Docs)
+Byte-identical duplicates are kept once, with every linking video recorded.
 
 Requirements: pip install requests openpyxl, plus the pdftotext CLI
 (poppler-utils on Linux, `brew install poppler` on Mac).
 The sheet and its Drive folders must be shared as "Anyone with the link".
 
-Usage: python prompts/fetch_sheet_pdfs.py [output_dir]
+Usage: python prompts/fetch_sheet_resources.py [output_dir]
 """
 import hashlib
 import html
@@ -71,7 +73,7 @@ def read_resource_links():
     return rows
 
 
-def list_drive_folder(folder_id, seen=None):
+def list_drive_folder(folder_id, path="", seen=None):
     """Recursively list files in a public Drive folder"""
     seen = seen if seen is not None else set()
     if folder_id in seen:
@@ -80,56 +82,79 @@ def list_drive_folder(folder_id, seen=None):
     page = get(f"https://drive.google.com/embeddedfolderview?id={folder_id}").text
     files = []
     for entry_id, href, name in FOLDER_ENTRY.findall(page):
-        if "/folders/" in html.unescape(href):
-            files += list_drive_folder(entry_id, seen)
+        href, name = html.unescape(href), html.unescape(name)
+        if "/folders/" in href:
+            files += list_drive_folder(entry_id, f"{path}{name}/", seen)
         else:
-            files.append({"id": entry_id, "name": html.unescape(name)})
+            files.append({"id": entry_id, "name": name, "path": path + name,
+                          "google_doc": "docs.google.com/document" in href})
     return files
 
 
+def kind_of(file):
+    """Classify a Drive file as 'pdf', 'text' or None (skipped)"""
+    name = file["name"].lower()
+    if name.endswith(".pdf"):
+        return "pdf"
+    if file["google_doc"] or name.endswith((".md", ".txt")) or "." not in name:
+        return "text"
+    return None
+
+
+def download(file):
+    if file["google_doc"]:
+        return get(f"https://docs.google.com/document/d/{file['id']}/export?format=txt").content
+    return get(f"https://drive.usercontent.google.com/download?id={file['id']}&export=download&confirm=t").content
+
+
 def main():
-    out = Path(sys.argv[1] if len(sys.argv) > 1 else "outputs/sheet_pdfs")
-    (out / "pdf").mkdir(parents=True, exist_ok=True)
-    (out / "text").mkdir(parents=True, exist_ok=True)
+    out = Path(sys.argv[1] if len(sys.argv) > 1 else "outputs/sheet_resources")
+    for sub in ("pdf", "text", "files"):
+        (out / sub).mkdir(parents=True, exist_ok=True)
 
     rows = read_resource_links()
     print(f"Sheet rows: {len(rows)}, with resources link: {sum(1 for r in rows if r['resources_link'])}")
 
-    # Collect PDF file IDs from Drive folders and direct Drive file links
-    pdfs = {}
+    # Collect files from Drive folders and direct Drive file links
+    found = {}
     for row in rows:
         url = row["resources_link"] or ""
         if "drive/folders/" in url:
             files = list_drive_folder(re.search(r"folders/([\w-]+)", url).group(1))
-            candidates = [f for f in files if f["name"].lower().endswith(".pdf")]
         elif "drive.google.com/file/d/" in url:
-            candidates = [{"id": re.search(r"file/d/([\w-]+)", url).group(1), "name": None}]
+            file_id = re.search(r"file/d/([\w-]+)", url).group(1)
+            files = [{"id": file_id, "name": f"{file_id}.pdf", "path": f"{file_id}.pdf", "google_doc": False}]
         else:
             continue
-        for f in candidates:
-            pdfs.setdefault(f["id"], {"id": f["id"], "name": f["name"], "videos": []})["videos"].append(row)
+        for f in files:
+            if kind_of(f):
+                found.setdefault(f["id"], {**f, "kind": kind_of(f), "videos": []})["videos"].append(row)
 
-    # Download, keep PDFs only, and drop byte-identical duplicates
+    # Download, drop byte-identical duplicates, extract PDF text
     manifest, by_hash = [], {}
-    for pdf in pdfs.values():
-        data = get(f"https://drive.usercontent.google.com/download?id={pdf['id']}&export=download&confirm=t").content
-        if not data.startswith(b"%PDF"):
+    for f in found.values():
+        data = download(f)
+        if f["kind"] == "pdf" and not data.startswith(b"%PDF"):
             continue
         digest = hashlib.md5(data).hexdigest()
         if digest in by_hash:
-            by_hash[digest]["videos"] += pdf["videos"]
+            by_hash[digest]["videos"] += f["videos"]
             continue
-        path = out / "pdf" / f"{pdf['id']}.pdf"
-        path.write_bytes(data)
-        text_path = out / "text" / f"{pdf['id']}.txt"
-        subprocess.run(["pdftotext", "-layout", str(path), str(text_path)], check=True)
-        entry = {**pdf, "md5": digest, "pdf_link": f"https://drive.google.com/file/d/{pdf['id']}/view",
-                 "text_file": str(text_path)}
+        entry = {**f, "md5": digest, "drive_link": f"https://drive.google.com/file/d/{f['id']}/view"}
+        if f["kind"] == "pdf":
+            pdf_path = out / "pdf" / f"{f['id']}.pdf"
+            pdf_path.write_bytes(data)
+            entry["text_file"] = str(out / "text" / f"{f['id']}.txt")
+            subprocess.run(["pdftotext", "-layout", str(pdf_path), entry["text_file"]], check=True)
+        else:
+            entry["text_file"] = str(out / "files" / f"{f['id']}.txt")
+            Path(entry["text_file"]).write_bytes(data)
         by_hash[digest] = entry
         manifest.append(entry)
 
     (out / "manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False))
-    print(f"Unique PDFs: {len(manifest)} -> {out / 'manifest.json'}")
+    pdfs = sum(1 for e in manifest if e["kind"] == "pdf")
+    print(f"Unique PDFs: {pdfs}, unique text files: {len(manifest) - pdfs} -> {out / 'manifest.json'}")
 
 
 if __name__ == "__main__":

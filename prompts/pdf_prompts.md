@@ -1,6 +1,6 @@
 # Prompts Extracted from the Video Resource PDFs
 
-Source sheet: [YouTube video resources](https://docs.google.com/spreadsheets/d/1h5k7vAAXl5_f4VtguDkHwCCy-S-dd7RfG3-rUiMxfPw/edit?gid=0#gid=0) (tabs Q1 to Q4 2026), **Resources** column.
+Source sheet: [YouTube video resources](https://docs.google.com/spreadsheets/d/1h5k7vAAXl5_f4VtguDkHwCCy-S-dd7RfG3-rUiMxfPw/edit?gid=0#gid=0) (tabs Q1 to Q4 2026), **Resources** column. Prompts that were shared as separate files (CLAUDE.md, SKILL.md, .txt) are in [drive_files/](drive_files/README.md).
 
 ## Summary
 
@@ -216,7 +216,7 @@ Incorporate this PDF about my business
 
 ### G05. How I’d Teach a 10 Year Old to Build Agentic Workflows (Claude Code)
 
-Video: How Iâ€™d Teach a 10 Year Old to Build Agentic Workflows (Claude Code) (2026-02-07)  
+Video: How I’d Teach a 10 Year Old to Build Agentic Workflows (Claude Code) (2026-02-07)  
 PDF: [How I’d Teach a 10 Year Old to Build Agentic Workflows (Claude Code).pdf](https://drive.google.com/file/d/1hbHsWU1lydI6Ja76FRQ4j1B1JDrrV8gY/view)
 
 **G05-P01. Install the Firecrawl MCP server** · _Prompt_
@@ -489,7 +489,7 @@ description: Use this skill when the agent needs to [specific trigger]
 
 ### G12. All of Claude Code Just Leaked… Here's How to Become a Top 1% User
 
-Video: Claude Code Source Code Just Leakedâ€¦ 8 Things You Must Do (2026-04-01)  
+Video: Claude Code Source Code Just Leaked… 8 Things You Must Do (2026-04-01)  
 PDF: [All of Claude Code Just Leaked… Here's How to Become a Top 1% User.pdf](https://drive.google.com/file/d/1y23jucSkEwpxD9QCM1Mr9Q4kVkCOh103/view)
 
 **G12-P01. CLAUDE.md rules: short, opinionated, operational (examples)** · _System / CLAUDE.md rule_
