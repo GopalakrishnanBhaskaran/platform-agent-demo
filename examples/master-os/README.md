@@ -7,12 +7,14 @@ master-os/
 ├── CLAUDE.md                  Root router: routing table, data rules, skill and automation rules
 ├── .claude/
 │   ├── settings.json          Hard deny and ask rules (enforced)
-│   └── skills/                Shared skills: email-reply, email-coach, cost-review, checkup, grill-me
+│   └── skills/                Shared skills: email-reply, email-coach, cost-review, checkup, grill-me, wiki
 ├── context/                   me.md, voice.md, priorities.md (used by every brand)
 ├── connections/registry.csv   Every connector, CLI profile and identity: brand, write actions, guard, secret location
+├── wiki/                      Shared LLM wiki: generic Azure and Databricks knowledge (CLAUDE.md schema, index, log, raw/, pages/)
 ├── brands/
 │   ├── personal/              CLAUDE.md, projects/, data/ (gitignored), .claude/skills/linkedin-post
-│   └── org-contoso/           CLAUDE.md, context/, projects/, data/ (gitignored), .claude/skills/ticket-triage
+│   └── org-contoso/           CLAUDE.md, context/, projects/, wiki/ (brand wiki + hot.md), data/ (gitignored, incl. wiki raw/),
+│                              .claude/skills/ticket-triage
 ├── clients/                   One pointer .md per client. The work itself lives outside.
 ├── automations/
 │   ├── registry.csv           The one log sheet of live automations
@@ -40,6 +42,19 @@ For why the AIOS is structured in these layers, see [docs/aios-structure.md](../
 | Client projects outside the OS | `clients/*/` is gitignored, and the checkup flags any client folder. |
 | Where the pointers go | `clients/fabrikam.md`: start date, first project price, main contact, deliverables and transcript paths. |
 | An n8n-style flowchart per agent | `automations/flows/AUT-00X-*.md`. Mermaid renders on GitHub and in `os-map.html`. |
+
+## The LLM wiki: two tiers
+
+| | Shared `wiki/` | Brand `brands/<brand>/wiki/` |
+|---|---|---|
+| Holds | Generic Azure and Databricks knowledge: concepts, how-tos, cost levers | That brand's known fixes, incidents and decisions, plus `hot.md` (what's in flight) |
+| Raw sources | `wiki/raw/` (public, committed) | `brands/<brand>/data/raw/` (gitignored) |
+| Used by | Every brand: org tickets, client cost reviews, LinkedIn posts | That brand only, and it travels with the brand on handover |
+| Rule | No org, client or person names (the checkup enforces this) | Generic facts get generalised and promoted to the shared wiki |
+
+- **Operations:** the `wiki` skill runs ingest, file-back and lint. AUT-007 ingests Contoso's raw sources every Friday.
+- **Linting:** `os_map.py --check` does the mechanical lint: pages missing from the index, broken links, raw files not yet ingested, a stale `hot.md` and private names in the shared wiki.
+- **Clients:** they get no wiki here. Their knowledge stays with their files.
 
 ## Personal vs org vs client: where each thing lives
 

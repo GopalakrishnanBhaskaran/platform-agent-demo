@@ -8,3 +8,5 @@ Append-only. One row per decision that changes how the OS works. Project decisio
 | 2026-10-18 | Client work stays outside the OS; `clients/` holds pointers only | The OS syncs to my personal GitHub, and client files are confidential | Never |
 | 2026-10-20 | Brand automations start in the brand folder in `dontAsk` mode | Headless runs can't read outside their working directory, so the folder is the silo | Claude Code adds per-folder settings |
 | 2026-10-25 | Connections get their own registry | Connectors aren't scoped by folder, and I can't guard what isn't listed | Never |
+| 2026-10-25 | Two wiki tiers: shared `wiki/` for generic knowledge, `brands/<brand>/wiki/` for brand knowledge | Generic knowledge is reused across org, client and content work; brand facts must stay siloed and hand over with the brand | A third brand needs a different split |
+| 2026-10-25 | Brand wiki raw sources live in the gitignored `data/raw/`; only distilled pages are committed | Raw postmortems and ticket exports hold personal and internal data | Never |

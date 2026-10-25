@@ -9,6 +9,7 @@ Reads:
   automations/registry.csv  the log sheet of live automations
   automations/flows/*.md    one mermaid flowchart per automation
   connections/registry.csv  every connector, CLI profile and identity, and who uses it
+  **/wiki/                  LLM wikis: index.md, log.md, pages/, raw/ (and hot.md for brands)
 
 Standard library only. Brand data/ folders are counted, never listed.
 """
@@ -30,6 +31,8 @@ CONNECTION_COLUMNS = {"id", "name", "type", "account", "brand", "mode", "write_a
                       "guard", "secret_location", "used_by", "last_reviewed"}
 STATUSES = {"live", "pilot", "paused", "retired"}
 STALE_DAYS = 90
+HOT_STALE_DAYS = 14
+MD_LINK = re.compile(r"\]\(([^)\s]+)\)")
 
 
 def rel(path, root):
@@ -44,6 +47,15 @@ def is_data_dir(path, root):
 def md(text):
     """Escape text and render `backticks` as <code>."""
     return re.sub(r"`([^`]+)`", r"<code>\1</code>", html.escape(text))
+
+
+def in_brand_data(path, root):
+    """True for a path inside brands/<brand>/data/, which is gitignored and may not exist yet."""
+    try:
+        parts = path.relative_to(root).parts
+    except ValueError:
+        return False
+    return len(parts) >= 3 and parts[0] == "brands" and parts[2] == "data" and (root / "brands" / parts[1] / "data").exists()
 
 
 def brand_of(relpath):
@@ -136,8 +148,10 @@ def check_routing(root, findings):
                 # A bare folder name like `data/` is a route only inside a routing table.
                 if not (multi_segment or is_file or (in_table and token.endswith("/"))):
                     continue
-                if not ((claude_md.parent / token).exists() or (root / token).exists()):
-                    findings.append(("error", f"Routing in {rel(claude_md, root)} points to a missing path: {token}"))
+                candidates = [(claude_md.parent / token).resolve(), (root / token).resolve()]
+                if any(c.exists() or in_brand_data(c, root) for c in candidates):
+                    continue
+                findings.append(("error", f"Routing in {rel(claude_md, root)} points to a missing path: {token}"))
     root_md = root / "CLAUDE.md"
     root_text = root_md.read_text(encoding="utf-8") if root_md.exists() else ""
     for b in brands:
@@ -207,7 +221,8 @@ def check_connections(conns, columns, rows, brands, findings):
                                           f"a connection that belongs to '{c.get('brand')}'"))
         stale_check(cid, c.get("last_reviewed"), findings)
     for r in rows:
-        if r.get("status") in ("live", "pilot") and r.get("id") not in covered:
+        no_credential = (r.get("credential") or "").strip().lower().startswith(("none", "n/a"))
+        if r.get("status") in ("live", "pilot") and r.get("id") not in covered and not no_credential:
             findings.append(("warn", f"{r.get('id')}: its credential has no row in connections/registry.csv"))
 
 
@@ -219,9 +234,67 @@ def check_freshness(root, findings):
             continue
         m = re.search(r"(?im)^\W*as of:?\W*(\d{4}-\d{2}-\d{2})", f.read_text(encoding="utf-8"))
         age = age_days(m.group(1)) if m else None
-        if age is not None and age > STALE_DAYS:
+        limit = HOT_STALE_DAYS if f.name == "hot.md" else STALE_DAYS
+        if age is not None and age > limit:
             findings.append(("warn", f"{rel(f, root)}: 'As of' {m.group(1)} is {age} days old. "
                                      "Refresh it or point to the live source"))
+
+
+def find_wikis(root):
+    return sorted(d for d in root.rglob("wiki")
+                  if d.is_dir() and (d / "index.md").exists() and not SKIP_DIRS & set(d.parts))
+
+
+def wiki_pages(wiki):
+    return sorted((wiki / "pages").rglob("*.md")) if (wiki / "pages").exists() else []
+
+
+def private_names(root, brands):
+    """Names that must never appear in the shared wiki: org brands and clients."""
+    names = set()
+    for b in brands:
+        if b.startswith("org-"):
+            names |= {b, b[len("org-"):]}
+    if (root / "clients").exists():
+        names |= {p.stem for p in (root / "clients").glob("*.md") if not p.stem.startswith("_")}
+    return names
+
+
+def check_wikis(root, brands, findings):
+    """Mechanical half of a wiki lint: index, links, ingest gaps, private names in the shared wiki."""
+    names = private_names(root, brands)
+    for wiki in find_wikis(root):
+        w = rel(wiki, root)
+        indexed = set()
+        for md_file in [wiki / "index.md", wiki / "hot.md", *wiki_pages(wiki)]:
+            if not md_file.exists():
+                continue
+            for target in MD_LINK.findall(md_file.read_text(encoding="utf-8")):
+                if target.startswith(("http", "mailto:", "#")):
+                    continue
+                path = (md_file.parent / target.split("#")[0]).resolve()
+                if md_file.name == "index.md":
+                    indexed.add(path)
+                if not path.exists():
+                    findings.append(("error", f"Broken wiki link in {rel(md_file, root)}: {target}"))
+        for page in wiki_pages(wiki):
+            if page.resolve() not in indexed:
+                findings.append(("warn", f"Wiki page {rel(page, root)} is not in {w}/index.md"))
+        log = (wiki / "log.md").read_text(encoding="utf-8") if (wiki / "log.md").exists() else ""
+        raw_dirs = [wiki / "raw"]
+        if wiki.parent.parent.name == "brands":
+            raw_dirs.append(wiki.parent / "data" / "raw")
+        for raw_dir in raw_dirs:
+            for f in sorted(p for p in raw_dir.rglob("*") if p.is_file() and p.name != "README.md"):
+                if f.name not in log:
+                    findings.append(("warn", f"Raw source {rel(f, root)} isn't in {w}/log.md: pulled but not ingested"))
+        if w == "wiki" and names:
+            pattern = re.compile(r"\b(" + "|".join(map(re.escape, sorted(names))) + r")\b", re.I)
+            for f in sorted(wiki.rglob("*.md")):
+                m = pattern.search(f.read_text(encoding="utf-8"))
+                if m:
+                    findings.append(("error", f"Shared wiki names '{m.group(1)}' in {rel(f, root)}. "
+                                              "Move it to the brand wiki or generalise it"))
 
 
 def check_clients_and_data(root, findings):
@@ -268,6 +341,7 @@ def run_checks(root):
     check_registry(root, rows, columns, skills, brands, findings)
     check_connections(conns, conn_columns, rows, brands, findings)
     check_freshness(root, findings)
+    check_wikis(root, brands, findings)
     check_clients_and_data(root, findings)
     check_file_map(root, notes, findings)
     order = {"error": 0, "warn": 1}
@@ -341,6 +415,8 @@ def write_html(root, out, findings, notes, rows, conns, skills, brands):
     tiles = [("Brands", len(brands)), ("Projects", projects),
              ("Skills", f"{total_skills} <small>({shared} shared)</small>"),
              ("Connections", len(conns)),
+             ("Wiki pages", f"{sum(len(wiki_pages(w)) for w in find_wikis(root))} "
+                            f"<small>({len(find_wikis(root))} wikis)</small>"),
              ("Automations", f"{active} <small>live or pilot</small>"),
              ("Checkup", f"{len(findings)} <small>({errors} errors)</small>")]
     tiles_html = "".join(f"<div class='tile'><div class='label'>{k}</div><div class='value'>{v}</div></div>"

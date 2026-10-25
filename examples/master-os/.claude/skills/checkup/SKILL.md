@@ -20,6 +20,7 @@ This catches:
 - Automations whose credential has no row in `connections/registry.csv`, and connections used across brands
 - Stale `last_reviewed` dates, and "As of" dates over 90 days old
 - Client folders inside `clients/`, and folders missing from `decisions/file-map.md`
+- Wiki lint: pages missing from an index, broken links, raw sources not yet ingested, a `hot.md` over 14 days old, and org or client names in the shared wiki
 
 ## 2. Make the judgment calls the script can't
 
