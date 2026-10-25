@@ -1,0 +1,10 @@
+id,name,type,account,brand,mode,write_actions,guard,secret_location,used_by,last_reviewed
+CON-01,Microsoft 365 (Outlook and Teams),connector,me@contoso.com,org-contoso,interactive and automation,Create drafts; sending needs my approval,ask rule mcp__*send* in settings.json; automation allowed tools,claude.ai connector (OAuth),AUT-001;AUT-002,2026-10-20
+CON-02,Gmail and Google Calendar,connector,personal Gmail,personal,interactive,Create drafts and events; sending needs my approval,ask rule mcp__*send* in settings.json,claude.ai connector (OAuth),,2026-10-20
+CON-03,Upwork,connector,personal freelancer profile,personal,interactive,Messages and proposals need my approval,ask rule mcp__*send* in settings.json,claude.ai connector (OAuth),,2026-10-20
+CON-04,Databricks CLI,cli,profile contoso-prod (my user),org-contoso,interactive,Read-only by rule; destructive commands denied,deny rules in settings.json,~/.databrickscfg (Claude can't read it),,2026-10-01
+CON-05,Azure CLI,cli,my Contoso Entra ID login,org-contoso,interactive,Read-only by rule; deletes and role assignments denied,deny rules in settings.json,~/.azure (Claude can't read it),,2026-10-01
+CON-06,sp-finops-reader,identity,service principal,org-contoso,automation,Writes ops.finops only,Unity Catalog grants,Databricks secret scope finops,AUT-003,2026-10-06
+CON-07,mi-idle-scan,identity,managed identity,org-contoso,automation,None (report only),Azure RBAC: Reader and Cost Management Reader,None (managed identity),AUT-004,2026-07-01
+CON-08,svc-jira-triage,api,Jira bot account,org-contoso,automation,Internal comments on PLAT only,Jira project role,Key Vault kv-platform,AUT-005,2026-10-15
+CON-09,Claude GitHub app,connector,master OS repo only,personal,automation,Commits to linkedin-content/drafts,Repo-scoped app install,claude.ai (GitHub app),AUT-006,2026-10-01

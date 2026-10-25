@@ -6,7 +6,7 @@ Drafts replies to new Contoso emails in my voice. Saves drafts only; I review an
 flowchart LR
   T([Schedule<br/>every 15 min, Mon-Fri 07-19]) --> F[Fetch new emails<br/>Outlook, last 15 min]
   F --> R{Sender domain}
-  R -- contoso.com --> C[Load context<br/>org-contoso CLAUDE.md<br/>voice.md, ticket kb]
+  R -- contoso.com --> C[Load context<br/>org-contoso CLAUDE.md<br/>voice.md, wiki fixes]
   R -- anything else --> S[Skip<br/>handled by other brands]
   C --> D[email-reply skill<br/>write draft]
   D --> O[(Outlook Drafts)]

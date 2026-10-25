@@ -7,19 +7,24 @@ master-os/
 ├── CLAUDE.md                  Root router: routing table, data rules, skill and automation rules
 ├── .claude/
 │   ├── settings.json          Hard deny and ask rules (enforced)
-│   └── skills/                Shared skills: email-reply, email-coach, cost-review, checkup, grill-me
-├── context/                   me.md, voice.md (used by every brand)
+│   └── skills/                Shared skills: email-reply, email-coach, cost-review, checkup, grill-me, wiki
+├── context/                   me.md, voice.md, priorities.md (used by every brand)
+├── connections/registry.csv   Every connector, CLI profile and identity: brand, write actions, guard, secret location
+├── wiki/                      Shared LLM wiki: generic Azure and Databricks knowledge (CLAUDE.md schema, index, log, raw/, pages/)
 ├── brands/
 │   ├── personal/              CLAUDE.md, projects/, data/ (gitignored), .claude/skills/linkedin-post
-│   └── org-contoso/           CLAUDE.md, context/, projects/, data/ (gitignored), .claude/skills/ticket-triage
+│   └── org-contoso/           CLAUDE.md, context/, projects/, wiki/ (brand wiki + hot.md), data/ (gitignored, incl. wiki raw/),
+│                              .claude/skills/ticket-triage
 ├── clients/                   One pointer .md per client. The work itself lives outside.
 ├── automations/
 │   ├── registry.csv           The one log sheet of live automations
 │   └── flows/                 One n8n-style Mermaid flowchart per automation
 ├── brainstorms/               grill-me captures
-├── decisions/file-map.md      Why every folder lives where it does
+├── decisions/                 file-map.md (why every folder lives where it does), log.md (OS decisions)
 └── tools/os_map.py            Drill-down HTML map plus mechanical checkup
 ```
+
+For why the AIOS is structured in these layers, see [docs/aios-structure.md](../../docs/aios-structure.md).
 
 ## Where each point from the call lives
 
@@ -27,7 +32,7 @@ master-os/
 |---|---|
 | The second brain must make sense to you | Every brand has the same shape: `brands/<brand>/projects/<project>/README.md`. The reasons are in `decisions/file-map.md`. |
 | Claude can read anything unless you deny it | Hard blocks go in `.claude/settings.json`, not in CLAUDE.md, which only guides Claude ([permissions docs](https://code.claude.com/docs/en/permissions)). |
-| Separate what Claude Code can touch from what each automation can touch | `settings.json` governs your sessions. Each automation has its own `credential` and `allowed_tools` in the registry, and starts in its brand folder. |
+| Separate what Claude Code can touch from what each automation can touch | `settings.json` governs your sessions. Each automation has its own `credential` and `allowed_tools` in the registry, and starts in its brand folder. Every credential has a row in `connections/registry.csv`. |
 | One folder, with routing and rules keeping brands apart | Root `CLAUDE.md` has the routing table and data rules. Each brand's `CLAUDE.md` holds that brand's rules. `data/` is gitignored per brand. |
 | One log sheet of live automations | `automations/registry.csv`: trigger, runs on, skills, reads, writes, credential, flowchart, last reviewed. |
 | Skills at the top vs nested by brand | Both. Shared skills sit in `.claude/skills/`. Brand-only skills sit in `brands/<brand>/.claude/skills/`, so the brand can be handed over intact. |
@@ -37,6 +42,19 @@ master-os/
 | Client projects outside the OS | `clients/*/` is gitignored, and the checkup flags any client folder. |
 | Where the pointers go | `clients/fabrikam.md`: start date, first project price, main contact, deliverables and transcript paths. |
 | An n8n-style flowchart per agent | `automations/flows/AUT-00X-*.md`. Mermaid renders on GitHub and in `os-map.html`. |
+
+## The LLM wiki: two tiers
+
+| | Shared `wiki/` | Brand `brands/<brand>/wiki/` |
+|---|---|---|
+| Holds | Generic Azure and Databricks knowledge: concepts, how-tos, cost levers | That brand's known fixes, incidents and decisions, plus `hot.md` (what's in flight) |
+| Raw sources | `wiki/raw/` (public, committed) | `brands/<brand>/data/raw/` (gitignored) |
+| Used by | Every brand: org tickets, client cost reviews, LinkedIn posts | That brand only, and it travels with the brand on handover |
+| Rule | No org, client or person names (the checkup enforces this) | Generic facts get generalised and promoted to the shared wiki |
+
+- **Operations:** the `wiki` skill runs ingest, file-back and lint. AUT-007 ingests Contoso's raw sources every Friday.
+- **Linting:** `os_map.py --check` does the mechanical lint: pages missing from the index, broken links, raw files not yet ingested, a stale `hot.md` and private names in the shared wiki.
+- **Clients:** they get no wiki here. Their knowledge stays with their files.
 
 ## Personal vs org vs client: where each thing lives
 
@@ -64,8 +82,10 @@ master-os/
 4. **Test the blocks:**
    - Start `claude` in `~/master-os` and run `/permissions` to see the active rules.
    - Create a dummy `.env` and ask Claude to `cat .env`. It should be refused.
-5. **Register what runs:** add a row per live automation to `automations/registry.csv`, and a flowchart for each (prompt below).
-6. **Check it:** run `python3 tools/os_map.py`, open `os-map.html`, then run `/checkup`. In this example, AUT-004 is flagged as not reviewed for over 90 days on purpose, so you can see a finding.
+5. **Register what can reach and what runs:**
+   - Add a row per connector, CLI profile and identity to `connections/registry.csv`.
+   - Add a row per live automation to `automations/registry.csv`, with a flowchart for each (prompt below).
+6. **Check it:** run `python3 tools/os_map.py`, open `os-map.html`, then run `/checkup`. In this example, AUT-004 and its identity CON-07 are flagged as not reviewed for over 90 days on purpose, so you can see a finding.
 7. **Keep it up:** run `/checkup` weekly. Run a grill-me file-map session every quarter.
 
 ## Prompts to reuse

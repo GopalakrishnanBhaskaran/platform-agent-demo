@@ -19,7 +19,7 @@ Pick one category:
 
 ## 2. Check known fixes
 
-Read `brands/org-contoso/projects/ticket-resolution/kb/<category>.md`. If a known fix matches, use it.
+Read `brands/org-contoso/wiki/index.md` and open the `fix` pages for the category. For generic background, use the shared `wiki/index.md`. If a known fix matches, use it.
 
 ## 3. Gather evidence (read-only)
 
@@ -34,6 +34,6 @@ Read `brands/org-contoso/projects/ticket-resolution/kb/<category>.md`. If a know
 
 ## 5. Learn
 
-If the fix is new, propose a kb entry (symptom, cause, fix, verified on date).
+If the fix is new and verified, file it back as a `fix-<symptom>.md` page in `brands/org-contoso/wiki/` (symptom, check, fix, verified on). Add it to the index and log it, following the `wiki` skill. In an automation run (AUT-005), put the proposed page in the internal note instead; a person files it.
 
 **Never** change grants, restart or resize clusters, or edit jobs without asking.

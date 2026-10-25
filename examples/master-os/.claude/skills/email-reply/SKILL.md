@@ -16,7 +16,7 @@ description: Draft a reply to an email in my voice, for the right brand. Use whe
 
 - `context/voice.md` (always)
 - The brand's `CLAUDE.md`, or the client's pointer file
-- For an org ticket email: `brands/org-contoso/projects/ticket-resolution/kb/` for a known fix
+- For an org ticket email: `brands/org-contoso/wiki/index.md` for a known fix
 
 Don't open another brand's files. Don't open client deliverables.
 

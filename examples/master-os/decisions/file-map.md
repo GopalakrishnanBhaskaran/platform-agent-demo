@@ -17,7 +17,11 @@ Every folder needs a row. Files are covered by their folder's row unless they ne
 | `.claude/skills/cost-review/sql/` | Generic system-table queries with no brand data, so they're safe to share. |
 | `.claude/skills/checkup/` | Shared: health check of the OS itself. |
 | `.claude/skills/grill-me/` | Shared: interviews me and writes the answers to `brainstorms/`. |
+| `.claude/skills/wiki/` | Shared: ingest, file-back and lint for every wiki, shared or brand. |
 | `context/` | Who I am and how I write. Used by every brand. |
+| `context/priorities.md` | 90-day priorities with an "As of" date. Situational, so CLAUDE.md points to it rather than importing it. |
+| `connections/` | Everything Claude or an automation can reach: connectors, CLI profiles, service identities. |
+| `connections/registry.csv` | One row per connection: account, brand, write actions, guard, where the secret lives, which automations use it. |
 | `brands/` | One folder per brand. Each brand is self-contained so it can be handed over intact. |
 | `brands/personal/` | My own brand: content, open-source toolkit, freelance pipeline. |
 | `brands/personal/.claude/` | Personal-only Claude config. |
@@ -31,20 +35,25 @@ Every folder needs a row. Files are covered by their folder's row unless they ne
 | `brands/org-contoso/` | Employer brand. Routing and notes only; code stays in Contoso's Azure DevOps. |
 | `brands/org-contoso/.claude/` | Contoso-only Claude config. |
 | `brands/org-contoso/.claude/skills/` | Contoso-only skills, kept here so the Contoso setup can be handed over intact. |
-| `brands/org-contoso/.claude/skills/ticket-triage/` | Uses Contoso's ticket categories and kb, so it doesn't belong at the root. |
+| `brands/org-contoso/.claude/skills/ticket-triage/` | Uses Contoso's ticket categories and fix pages, so it doesn't belong at the root. |
 | `brands/org-contoso/context/` | Contoso workspaces, subscriptions and service principals. |
 | `brands/org-contoso/projects/` | One folder per Contoso project. |
 | `brands/org-contoso/projects/ticket-resolution/` | Ticket playbook. Tickets themselves stay in Jira. |
-| `brands/org-contoso/projects/ticket-resolution/kb/` | Known fixes per category. ticket-triage reads these. |
 | `brands/org-contoso/projects/dbx-cost-savings/` | Savings tracker. The job code lives in the finops-jobs repo. |
 | `brands/org-contoso/projects/hms-to-uc-migration/` | Migration plan and decisions. UCX code lives in the uc-migration repo. |
-| `brands/org-contoso/data/` | Local extracts and email logs for Contoso only. Gitignored. |
+| `brands/org-contoso/data/` | Local extracts, email logs and wiki raw sources for Contoso only. Gitignored. |
+| `brands/org-contoso/wiki/` | Contoso LLM wiki: fixes, incidents, decisions, plus `hot.md`. Travels with the brand on handover. |
+| `brands/org-contoso/wiki/pages/` | Contoso pages. Known fixes moved here from the ticket project's `kb/`. |
 | `clients/` | One pointer file per client. Client work lives outside the OS. |
 | `automations/` | Everything that runs without me. |
 | `automations/registry.csv` | The one log sheet of live automations: trigger, skills, reads, writes, credential. |
 | `automations/flows/` | One flowchart per automation, linked from the registry. |
 | `brainstorms/` | Raw grill-me captures. Polished results move to a project. |
+| `wiki/` | Shared LLM wiki: generic Azure and Databricks knowledge. No org, client or person names. |
+| `wiki/raw/` | Immutable public sources (doc notes, release notes). Input for ingest only. |
+| `wiki/pages/` | Pages Claude writes and maintains, one topic each. |
 | `decisions/` | This map and other "why" records. |
+| `decisions/log.md` | Append-only log of decisions that change how the OS works. |
 | `tools/` | Scripts for the OS itself: the map and the checkup checks. |
 
 ## Moves log
@@ -53,3 +62,4 @@ Every folder needs a row. Files are covered by their folder's row unless they ne
 |---|---|---|---|
 | 2026-10-18 | cost SQL | `brands/org-contoso/projects/dbx-cost-savings/sql/` to `.claude/skills/cost-review/sql/` | Used for clients too. Generic, with no Contoso data. |
 | 2026-10-18 | ticket-triage | `.claude/skills/` to `brands/org-contoso/.claude/skills/` | Only Contoso uses it, and it should travel with the brand. |
+| 2026-10-25 | ticket kb | `brands/org-contoso/projects/ticket-resolution/kb/` to `brands/org-contoso/wiki/pages/` | Known fixes are knowledge that outlives the project. The wiki gives them an index, a log and lint. |

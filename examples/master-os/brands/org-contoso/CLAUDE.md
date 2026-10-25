@@ -6,7 +6,8 @@ Contoso platform team. We run Azure and Databricks for the data teams. My part: 
 
 | Need | Path |
 |---|---|
-| Ticket playbook and known fixes | `projects/ticket-resolution/` |
+| Known fixes, incidents, platform decisions (brand wiki) | `wiki/index.md`, then `wiki/hot.md` for what's in flight |
+| Ticket playbook and metrics | `projects/ticket-resolution/` |
 | Cost savings tracker | `projects/dbx-cost-savings/` |
 | HMS to Unity Catalog migration | `projects/hms-to-uc-migration/` |
 | Workspaces, subscriptions, owners | `context/environments.md` |

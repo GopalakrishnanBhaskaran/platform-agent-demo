@@ -6,6 +6,7 @@ description: Turn one idea from brands/personal/projects/linkedin-content/ideas.
 # LinkedIn post (personal only)
 
 1. Pick the top unused idea in `brands/personal/projects/linkedin-content/ideas.md`.
+   For the technical detail, read the matching shared wiki page in `wiki/pages/`. Never use a brand wiki: shared pages hold no org or client names, which makes them the safe source for public posts.
 2. Write the post:
    - First line: the problem or the saving, with a number if there is one
    - 3 to 5 short steps or points

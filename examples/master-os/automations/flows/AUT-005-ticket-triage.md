@@ -5,7 +5,7 @@ When a new PLAT ticket is created, it drafts an internal triage note on the tick
 ```mermaid
 flowchart LR
   T([Jira webhook<br/>issue_created, project PLAT]) --> J[Container Apps job<br/>starts claude -p]
-  J --> K[Load ticket<br/>and kb/category.md]
+  J --> K[Load ticket, wiki index<br/>and fix pages]
   K --> X[ticket-triage skill<br/>classify, read-only checks]
   X --> E{Known fix?}
   E -- yes --> N1[Note: fix steps<br/>and user reply draft]
@@ -18,7 +18,7 @@ flowchart LR
 
 ```bash
 cd /app/master-os/brands/org-contoso && claude -p "/ticket-triage ticket=$JIRA_KEY" \
-  --add-dir ../../context \
+  --add-dir ../../context --add-dir ../../wiki \
   --permission-mode dontAsk --permission-prompts none \
   --allowedTools "Bash(databricks jobs get-run *),<jira comment tool>"
 ```
