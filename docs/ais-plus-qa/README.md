@@ -9,6 +9,7 @@ recording links are not stored here, since the calls are from a paid community.
 | Date | Length | Main topics |
 |------|--------|-------------|
 | [Jan 14, 2025](2025-01-14.md) | 55 min | n8n project scoping, client handover, data security, consistent agent prompting |
+| [Jul 6, 2026](2026-07-06.md) | 63 min | Fable orchestration, consulting evolution, beginner roadmap, single AIOS, no-API automation, team sync |
 | [Jul 20, 2026](2026-07-20.md) | 47 min | Harness choice, team knowledge bases, evals, IP, SOP scoping, value-based pricing |
 | [Aug 3, 2026](2026-08-03.md) | 46 min | Conference takeaways, case-study outreach, QA and evals, value-based pricing, API cost estimates |
 | [Aug 24, 2026](2026-08-24.md) | 62 min | Free-build scoping, referrals, niching, cold outreach, pricing, partnerships, team AIOS |
