@@ -1,0 +1,19 @@
+# Secrets
+.env
+.env.*
+*.pem
+*.pfx
+
+# Brand data is siloed and stays local. Only the README in each data/ folder is committed.
+brands/*/data/*
+!brands/*/data/README.md
+
+# Generated map (rebuild with: python3 tools/os_map.py)
+os-map.html
+
+# Client work never lives here. If something slips in, git won't pick it up.
+clients/*/
+
+# Python
+__pycache__/
+.venv/
