@@ -190,6 +190,7 @@ The intent parser can handle complex requests:
 - **[AUTH_ERROR_EXPLAINED.md](AUTH_ERROR_EXPLAINED.md)** - Unity Catalog authentication details
 - **[CONSOLE_OUTPUT_EXAMPLE.md](CONSOLE_OUTPUT_EXAMPLE.md)** - Example console outputs
 - **[docs/claude-usage-reference.md](docs/claude-usage-reference.md)** - Claude Code practices distilled from the course videos (with a CLAUDE.md starter block)
+- **[examples/master-os/](examples/master-os/README.md)** - Template for one master OS folder holding personal, org and client work, with routing, an automation registry, flowcharts and a drill-down map
 
 ## 🐛 Troubleshooting
 

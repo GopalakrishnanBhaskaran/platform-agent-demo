@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(secrets/**)",
+      "Read(~/.azure/**)",
+      "Read(~/.databrickscfg)",
+      "Read(~/.ssh/**)",
+      "Bash(az group delete *)",
+      "Bash(az resource delete *)",
+      "Bash(az role assignment create *)",
+      "Bash(databricks fs rm *)",
+      "Bash(databricks clusters permanent-delete *)",
+      "Bash(databricks grants update *)",
+      "Bash(git push --force *)"
+    ],
+    "ask": [
+      "Read(~/OneDrive/Clients/**)",
+      "Bash(git push *)",
+      "Bash(databricks jobs run-now *)",
+      "Bash(az deployment group create *)"
+    ]
+  }
+}
