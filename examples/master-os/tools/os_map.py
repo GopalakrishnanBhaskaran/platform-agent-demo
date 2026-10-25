@@ -8,6 +8,7 @@ Reads:
   decisions/file-map.md     why each folder lives where it does
   automations/registry.csv  the log sheet of live automations
   automations/flows/*.md    one mermaid flowchart per automation
+  connections/registry.csv  every connector, CLI profile and identity, and who uses it
 
 Standard library only. Brand data/ folders are counted, never listed.
 """
@@ -25,6 +26,8 @@ SKIP_DIRS = {".git", "__pycache__", ".venv", "node_modules"}
 SKIP_FILES = {"os-map.html", ".DS_Store"}
 REGISTRY_COLUMNS = {"id", "name", "brand", "status", "trigger", "skills_used",
                     "reads_from", "writes_to", "credential", "flow_doc", "last_reviewed"}
+CONNECTION_COLUMNS = {"id", "name", "type", "account", "brand", "mode", "write_actions",
+                      "guard", "secret_location", "used_by", "last_reviewed"}
 STATUSES = {"live", "pilot", "paused", "retired"}
 STALE_DAYS = 90
 
@@ -63,8 +66,19 @@ def load_file_map(root):
     return notes
 
 
-def load_registry(root):
-    path = root / "automations" / "registry.csv"
+def age_days(value):
+    try:
+        return (dt.date.today() - dt.date.fromisoformat(value)).days
+    except (TypeError, ValueError):
+        return None
+
+
+def split_ids(value):
+    return [v.strip() for v in re.split(r"[;,]", value or "") if v.strip() and v.strip().lower() != "n/a"]
+
+
+def load_registry(root, *parts):
+    path = root.joinpath(*parts)
     if not path.exists():
         return [], set()
     with path.open(newline="", encoding="utf-8") as f:
@@ -138,7 +152,6 @@ def check_registry(root, rows, columns, skills, brands, findings):
     missing = REGISTRY_COLUMNS - columns
     if rows and missing:
         findings.append(("error", f"registry.csv is missing columns: {', '.join(sorted(missing))}"))
-    today = dt.date.today()
     referenced = set()
     for row in rows:
         rid = row.get("id", "?")
@@ -146,10 +159,7 @@ def check_registry(root, rows, columns, skills, brands, findings):
             findings.append(("warn", f"{rid}: status '{row.get('status')}' is not one of {sorted(STATUSES)}"))
         if row.get("brand") not in brands:
             findings.append(("error", f"{rid}: brand '{row.get('brand')}' has no folder in brands/"))
-        for skill in re.split(r"[;,]", row.get("skills_used", "")):
-            skill = skill.strip()
-            if not skill or skill.lower() == "n/a":
-                continue
+        for skill in split_ids(row.get("skills_used")):
             if skill not in skills:
                 findings.append(("error", f"{rid}: uses skill '{skill}', which doesn't exist"))
             elif all(s not in ("shared", row.get("brand")) for s, _ in skills[skill]):
@@ -159,17 +169,59 @@ def check_registry(root, rows, columns, skills, brands, findings):
         referenced.add(flow)
         if not flow or not (root / flow).exists():
             findings.append(("error", f"{rid}: flowchart '{flow}' is missing"))
-        try:
-            age = (today - dt.date.fromisoformat(row.get("last_reviewed", ""))).days
-            if age > STALE_DAYS:
-                findings.append(("warn", f"{rid}: last reviewed {age} days ago (over {STALE_DAYS})"))
-        except ValueError:
-            findings.append(("warn", f"{rid}: last_reviewed '{row.get('last_reviewed')}' is not a YYYY-MM-DD date"))
+        stale_check(rid, row.get("last_reviewed"), findings)
     flows_dir = root / "automations" / "flows"
     if flows_dir.exists():
         for flow in sorted(flows_dir.glob("*.md")):
             if rel(flow, root) not in referenced:
                 findings.append(("warn", f"Flowchart {rel(flow, root)} has no row in registry.csv"))
+
+
+def stale_check(rid, value, findings):
+    age = age_days(value)
+    if age is None:
+        findings.append(("warn", f"{rid}: last_reviewed '{value}' is not a YYYY-MM-DD date"))
+    elif age > STALE_DAYS:
+        findings.append(("warn", f"{rid}: last reviewed {age} days ago (over {STALE_DAYS})"))
+
+
+def check_connections(conns, columns, rows, brands, findings):
+    if not conns:
+        findings.append(("warn", "No connections/registry.csv: list every connector, CLI profile and identity"))
+        return
+    missing = CONNECTION_COLUMNS - columns
+    if missing:
+        findings.append(("error", f"connections/registry.csv is missing columns: {', '.join(sorted(missing))}"))
+    automation_brand = {r.get("id"): r.get("brand") for r in rows}
+    covered = set()
+    for c in conns:
+        cid = c.get("id", "?")
+        if c.get("brand") not in brands and c.get("brand") != "shared":
+            findings.append(("error", f"{cid}: brand '{c.get('brand')}' has no folder in brands/"))
+        for aid in split_ids(c.get("used_by")):
+            covered.add(aid)
+            if aid not in automation_brand:
+                findings.append(("error", f"{cid}: used by {aid}, which isn't in automations/registry.csv"))
+            elif c.get("brand") not in ("shared", automation_brand[aid]):
+                findings.append(("error", f"{aid} ({automation_brand[aid]}) uses {cid}, "
+                                          f"a connection that belongs to '{c.get('brand')}'"))
+        stale_check(cid, c.get("last_reviewed"), findings)
+    for r in rows:
+        if r.get("status") in ("live", "pilot") and r.get("id") not in covered:
+            findings.append(("warn", f"{r.get('id')}: its credential has no row in connections/registry.csv"))
+
+
+def check_freshness(root, findings):
+    """Situational files carry an 'As of' date; flag the ones past their refresh cycle."""
+    for f in sorted(root.rglob("*.md")):
+        parts = Path(rel(f, root)).parts
+        if SKIP_DIRS & set(parts) or (len(parts) > 3 and parts[0] == "brands" and parts[2] == "data"):
+            continue
+        m = re.search(r"(?im)^\W*as of:?\W*(\d{4}-\d{2}-\d{2})", f.read_text(encoding="utf-8"))
+        age = age_days(m.group(1)) if m else None
+        if age is not None and age > STALE_DAYS:
+            findings.append(("warn", f"{rel(f, root)}: 'As of' {m.group(1)} is {age} days old. "
+                                     "Refresh it or point to the live source"))
 
 
 def check_clients_and_data(root, findings):
@@ -208,16 +260,19 @@ def check_file_map(root, notes, findings):
 def run_checks(root):
     findings = []
     notes = load_file_map(root)
-    rows, columns = load_registry(root)
+    rows, columns = load_registry(root, "automations", "registry.csv")
+    conns, conn_columns = load_registry(root, "connections", "registry.csv")
     skills, skill_findings = find_skills(root)
     findings += skill_findings
     brands = check_routing(root, findings)
     check_registry(root, rows, columns, skills, brands, findings)
+    check_connections(conns, conn_columns, rows, brands, findings)
+    check_freshness(root, findings)
     check_clients_and_data(root, findings)
     check_file_map(root, notes, findings)
     order = {"error": 0, "warn": 1}
     findings = sorted(dict.fromkeys(findings), key=lambda f: order[f[0]])
-    return findings, notes, rows, skills, brands
+    return findings, notes, rows, conns, skills, brands
 
 
 # ---------- HTML ----------
@@ -267,7 +322,17 @@ def automations_html(root, rows):
     return f"<div class='scroll'><table>{head}{''.join(body)}</table></div>{''.join(flows)}"
 
 
-def write_html(root, out, findings, notes, rows, skills, brands):
+def connections_html(conns):
+    cols = [("id", "ID"), ("name", "Name"), ("type", "Type"), ("account", "Account"), ("brand", "Brand"),
+            ("mode", "Used"), ("write_actions", "Can write"), ("guard", "Guard"),
+            ("secret_location", "Secret lives in"), ("used_by", "Automations")]
+    head = "<tr>" + "".join(f"<th>{label}</th>" for _, label in cols) + "</tr>"
+    body = "".join("<tr>" + "".join(f"<td>{html.escape(c.get(k) or '')}</td>" for k, _ in cols) + "</tr>"
+                   for c in conns)
+    return f"<div class='scroll'><table>{head}{body}</table></div>" if conns else "<p>No connections listed.</p>"
+
+
+def write_html(root, out, findings, notes, rows, conns, skills, brands):
     projects = sum(1 for b in brands for p in (root / "brands" / b / "projects").glob("*") if p.is_dir())
     shared = sum(1 for places in skills.values() for s, _ in places if s == "shared")
     total_skills = sum(len(p) for p in skills.values())
@@ -275,6 +340,7 @@ def write_html(root, out, findings, notes, rows, skills, brands):
     errors = sum(1 for f in findings if f[0] == "error")
     tiles = [("Brands", len(brands)), ("Projects", projects),
              ("Skills", f"{total_skills} <small>({shared} shared)</small>"),
+             ("Connections", len(conns)),
              ("Automations", f"{active} <small>live or pilot</small>"),
              ("Checkup", f"{len(findings)} <small>({errors} errors)</small>")]
     tiles_html = "".join(f"<div class='tile'><div class='label'>{k}</div><div class='value'>{v}</div></div>"
@@ -282,7 +348,8 @@ def write_html(root, out, findings, notes, rows, skills, brands):
     findings_html = "".join(f"<li class='{lvl}'><b>{lvl}</b> {html.escape(msg)}</li>" for lvl, msg in findings) \
         or "<li>No findings.</li>"
     page = TEMPLATE.format(date=dt.date.today().isoformat(), tiles=tiles_html,
-                           tree=tree_html(root, root, notes), automations=automations_html(root, rows),
+                           tree=tree_html(root, root, notes), connections=connections_html(conns),
+                           automations=automations_html(root, rows),
                            findings=findings_html)
     out.write_text(page, encoding="utf-8")
 
@@ -326,6 +393,7 @@ th, td {{ border:1px solid var(--line); padding:6px 8px; text-align:left; vertic
 <h2>Folders</h2>
 <input id="q" placeholder="Search files and reasons, for example: cost, ticket, clients">
 <div class="tree" id="tree">{tree}</div>
+<h2>Connections</h2>{connections}
 <h2>Automations</h2>{automations}
 <h2>Checkup</h2><ul class="findings">{findings}</ul>
 </main>
@@ -362,7 +430,7 @@ def main():
     ap.add_argument("--check", action="store_true", help="print checkup findings only")
     args = ap.parse_args()
     root = args.root.resolve()
-    findings, notes, rows, skills, brands = run_checks(root)
+    findings, notes, rows, conns, skills, brands = run_checks(root)
     if args.check:
         for lvl, msg in findings:
             print(f"[{lvl.upper():5}] {msg}")
@@ -370,7 +438,7 @@ def main():
         print(f"\n{len(findings)} findings, {errors} errors")
         return 1 if errors else 0
     out = args.out or root / "os-map.html"
-    write_html(root, out, findings, notes, rows, skills, brands)
+    write_html(root, out, findings, notes, rows, conns, skills, brands)
     print(f"Wrote {out} ({len(findings)} checkup findings)")
     return 0
 

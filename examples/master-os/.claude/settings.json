@@ -19,7 +19,11 @@
       "Read(~/OneDrive/Clients/**)",
       "Bash(git push *)",
       "Bash(databricks jobs run-now *)",
-      "Bash(az deployment group create *)"
+      "Bash(az deployment group create *)",
+      "mcp__*send*",
+      "mcp__*forward*",
+      "mcp__*delete*",
+      "mcp__*trash*"
     ]
   }
 }

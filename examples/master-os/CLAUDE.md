@@ -13,10 +13,20 @@ Read the brand's CLAUDE.md before doing work for that brand.
 | My LinkedIn content, my open-source cost toolkit, my freelance pipeline | personal | `brands/personal/CLAUDE.md` |
 | Contoso tickets, cost savings, UC migration, platform automation | org-contoso | `brands/org-contoso/CLAUDE.md` |
 | A freelance client | client | `clients/<client>.md` |
+| What I'm focused on, what to work on next | (any) | `context/priorities.md` |
+| Which accounts, CLIs and identities exist, and who may use them | (any) | `connections/registry.csv` |
 | A live automation (scheduled or webhook) | (any) | `automations/registry.csv` |
 | Why a file or folder lives where it does | (any) | `decisions/file-map.md` |
+| Why the OS works the way it does | (any) | `decisions/log.md` |
 
 If you can't tell which brand a task belongs to, ask. Don't guess.
+
+## Sources of truth
+
+- **Automations:** `automations/registry.csv`. **Connections:** `connections/registry.csv`. **A client's facts:** that client's file.
+- **Live numbers** (costs, ticket counts, savings status): the source system or the project tracker. Never copy them into a CLAUDE.md file; point to where they live.
+- A brand's CLAUDE.md wins over this file for that brand's specifics. Safety rules here and in `.claude/settings.json` always win.
+- If two files disagree, tell me which ones and ask. Don't pick one.
 
 ## Data rules
 
@@ -45,6 +55,9 @@ If you can't tell which brand a task belongs to, ask. Don't guess.
 - Investigate Azure and Databricks with read-only commands. Ask before any write, delete, push, deploy or send.
 - Emails: follow `context/voice.md`. Draft only. I send.
 - New file or folder: add a line to `decisions/file-map.md` saying why it lives there.
+- New connector, CLI profile or identity: add a row to `connections/registry.csv` before using it.
+- A decision that changes how the OS works goes in `decisions/log.md`.
+- Finished project: move it to `brands/<brand>/archive/` with a one-line outcome in its README.
 
 ## Maintenance
 

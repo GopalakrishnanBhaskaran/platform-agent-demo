@@ -18,6 +18,9 @@ Every folder needs a row. Files are covered by their folder's row unless they ne
 | `.claude/skills/checkup/` | Shared: health check of the OS itself. |
 | `.claude/skills/grill-me/` | Shared: interviews me and writes the answers to `brainstorms/`. |
 | `context/` | Who I am and how I write. Used by every brand. |
+| `context/priorities.md` | 90-day priorities with an "As of" date. Situational, so CLAUDE.md points to it rather than importing it. |
+| `connections/` | Everything Claude or an automation can reach: connectors, CLI profiles, service identities. |
+| `connections/registry.csv` | One row per connection: account, brand, write actions, guard, where the secret lives, which automations use it. |
 | `brands/` | One folder per brand. Each brand is self-contained so it can be handed over intact. |
 | `brands/personal/` | My own brand: content, open-source toolkit, freelance pipeline. |
 | `brands/personal/.claude/` | Personal-only Claude config. |
@@ -45,6 +48,7 @@ Every folder needs a row. Files are covered by their folder's row unless they ne
 | `automations/flows/` | One flowchart per automation, linked from the registry. |
 | `brainstorms/` | Raw grill-me captures. Polished results move to a project. |
 | `decisions/` | This map and other "why" records. |
+| `decisions/log.md` | Append-only log of decisions that change how the OS works. |
 | `tools/` | Scripts for the OS itself: the map and the checkup checks. |
 
 ## Moves log

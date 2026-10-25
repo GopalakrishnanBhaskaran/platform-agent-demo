@@ -13,7 +13,13 @@ Read-only. Don't move, rename or delete anything until I approve the fixes.
 python3 tools/os_map.py --check
 ```
 
-This catches broken routing paths, skill folders with no `SKILL.md`, registry rows that point to missing skills or flowcharts, stale `last_reviewed` dates, client folders inside `clients/`, and folders missing from `decisions/file-map.md`.
+This catches:
+
+- Broken routing paths and skill folders with no `SKILL.md`
+- Registry rows that point to missing skills or flowcharts
+- Automations whose credential has no row in `connections/registry.csv`, and connections used across brands
+- Stale `last_reviewed` dates, and "As of" dates over 90 days old
+- Client folders inside `clients/`, and folders missing from `decisions/file-map.md`
 
 ## 2. Make the judgment calls the script can't
 
@@ -22,6 +28,9 @@ This catches broken routing paths, skill folders with no `SKILL.md`, registry ro
 - **Brand CLAUDE.md files:** under about 100 lines? Do any repeat root rules or contradict each other?
 - **Siloing:** is any brand's data, a client name or a figure sitting in a shared file or shared skill?
 - **Registry and reality:** for each live automation, do the reads, writes and credential in its row still match the flowchart and the code?
+- **Connections:** is any connector or CLI in use that has no row? Can any connection write more than its row says?
+- **Expertise vs situational:** does any always-loaded file (root or brand `CLAUDE.md`, `context/me.md`) hold a live number or status? Replace it with a pointer to the source of truth.
+- **Clashes:** spot-check 3 key facts. Does each live in one place, with pointers everywhere else?
 
 ## 3. Report
 
