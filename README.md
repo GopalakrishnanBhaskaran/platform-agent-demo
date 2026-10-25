@@ -190,6 +190,7 @@ The intent parser can handle complex requests:
 - **[AUTH_ERROR_EXPLAINED.md](AUTH_ERROR_EXPLAINED.md)** - Unity Catalog authentication details
 - **[CONSOLE_OUTPUT_EXAMPLE.md](CONSOLE_OUTPUT_EXAMPLE.md)** - Example console outputs
 - **[docs/claude-usage-reference.md](docs/claude-usage-reference.md)** - Claude Code practices distilled from the course videos (with a CLAUDE.md starter block)
+- **[docs/ais-plus-qa/](docs/ais-plus-qa/README.md)** - Q&A and key points from the AIS+ weekly Q&A calls, one file per session by date
 - **[examples/master-os/](examples/master-os/README.md)** - Template for one master OS folder holding personal, org and client work, with routing, an automation registry, flowcharts and a drill-down map
 - **[docs/aios-structure.md](docs/aios-structure.md)** - How an AIOS should be structured, based on the Q&A: the 4 Cs plus Boundaries and Visibility, design rules, and the open decisions
 
